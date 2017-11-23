@@ -4,61 +4,63 @@
     <PathDelim Value="\"/>
     <Version Value="10"/>
     <BuildModes Active="Default"/>
-    <Units Count="1">
+    <Units Count="3">
       <Unit0>
         <Filename Value="BJW.pas"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="2" Y="8"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="121"/>
+        <CursorPos X="15" Y="142"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit0>
+      <Unit1>
+        <Filename Value="pascal ABC\BJW ABC.pas"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\BJW_ABC\BJW ABC.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="191"/>
+        <CursorPos X="7" Y="214"/>
+        <UsageCount Value="10"/>
+      </Unit2>
     </Units>
-    <JumpHistory Count="11" HistoryIndex="10">
+    <JumpHistory Count="8" HistoryIndex="7">
       <Position1>
         <Filename Value="BJW.pas"/>
-        <Caret Line="8" Column="14"/>
+        <Caret Line="19" Column="13" TopLine="2"/>
       </Position1>
       <Position2>
         <Filename Value="BJW.pas"/>
-        <Caret Line="6" Column="33"/>
+        <Caret Line="9" Column="25" TopLine="2"/>
       </Position2>
       <Position3>
         <Filename Value="BJW.pas"/>
-        <Caret Line="27" Column="30" TopLine="6"/>
+        <Caret Line="224" TopLine="191"/>
       </Position3>
       <Position4>
         <Filename Value="BJW.pas"/>
-        <Caret Line="14" Column="9" TopLine="2"/>
+        <Caret Line="142" TopLine="122"/>
       </Position4>
       <Position5>
         <Filename Value="BJW.pas"/>
-        <Caret Line="27" Column="32" TopLine="7"/>
+        <Caret Line="137" Column="5" TopLine="114"/>
       </Position5>
       <Position6>
         <Filename Value="BJW.pas"/>
-        <Caret Line="4" Column="3"/>
+        <Caret Line="131" Column="12" TopLine="113"/>
       </Position6>
       <Position7>
         <Filename Value="BJW.pas"/>
-        <Caret Line="3" Column="5"/>
+        <Caret Line="134" Column="11" TopLine="117"/>
       </Position7>
       <Position8>
         <Filename Value="BJW.pas"/>
-        <Caret Line="27" Column="18" TopLine="7"/>
+        <Caret Line="224" Column="3" TopLine="194"/>
       </Position8>
-      <Position9>
-        <Filename Value="BJW.pas"/>
-        <Caret Line="4" Column="18" TopLine="3"/>
-      </Position9>
-      <Position10>
-        <Filename Value="BJW.pas"/>
-        <Caret Line="19" Column="193" TopLine="7"/>
-      </Position10>
-      <Position11>
-        <Filename Value="BJW.pas"/>
-        <Caret Line="8" Column="7"/>
-      </Position11>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

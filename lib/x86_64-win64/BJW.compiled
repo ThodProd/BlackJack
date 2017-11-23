@@ -2,5 +2,4 @@
 <CONFIG>
   <Compiler Value="C:\lazarus\fpc\3.0.2\bin\x86_64-win64\fpc.exe" Date="1247518955"/>
   <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FiC:\PAC_OLD\PAK\BJW\lib\x86_64-win64 -FuC:\PAC_OLD\PAK\BJW\ -FUC:\PAC_OLD\PAK\BJW\lib\x86_64-win64\ BJW.pas"/>
-  <Complete Value="False"/>
 </CONFIG>
