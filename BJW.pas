@@ -9,19 +9,22 @@ uses
 
 const
   Loading = '. . .';
-
+type
+  Comb = array[1..100, 1..20] of integer;
 label
-  LoginGo;
+  LoginGo, MenuGo;
 var
-  i, j, MenuMod, LoginMod: integer;                              //1 - Черви
-  Start, Name: string;                                           //2 - Буби
-  MenuError, LoginError, NewGameError, MS: boolean;              //3 - Крести
+  i, MenuMod, LoginMod: integer;                              //1 - Черви
+  Start, Name, Winner: string;                                           //2 - Буби
+  MenuError, LoginError, NewGameError, NewGameBool, WinSel, HideMode,
+  MakeBetSw, MS: boolean;
+  //3 - Крести
   User: array[1..100, 1..3] of string;                           //4 - Пики
   Card: array[1..13, 1..4] of integer;
-  CombinationPlayer: array[1..100, 1..20] of string;
+  CombinationPlayer: Comb;
   ForbiddenCard: array[1..100] of string;
-  NumberPlayers, Cash, Position, QuantityCards,
-  QuantityPlayerInPlay, ForbiddenCardNum: integer;
+  NumberPlayers, Cash, Position, QuantityCards, QuantityPlayerInPlay,
+  ForbiddenCardNum, Bank: integer;
   T: Text;
 
   procedure BJLabel;//Show Label
@@ -67,6 +70,49 @@ var
     ClrScr;
   end;
 
+
+
+  procedure Hide;
+  var
+    Player: integer;
+  begin
+    for Player := 2 to QuantityPlayerInPlay do
+    begin
+      case Player of
+        2:
+        begin
+          if HideMode = True then
+          begin
+            gotoXY(57, 14);
+            Write('XXXXX');
+            gotoXY(61, 13);
+            Write('|XX|');
+          end;
+        end;
+        3:
+        begin
+          if HideMode = True then
+          begin
+            gotoXY(42, 14);
+            Write('XXXXX');
+            gotoXY(45, 13);
+            Write('|XX|');
+          end;
+        end;
+        4:
+        begin
+          if HideMode = True then
+          begin
+            gotoXY(73, 14);
+            Write('XXXXX');
+            gotoXY(76, 13);
+            Write('|XX|');
+          end;
+        end;
+      end;
+    end;
+  end;
+
   procedure AddForbiddenCard(Comb: string);//AddForbiddenCard
   begin
     Inc(ForbiddenCardNum);
@@ -84,44 +130,35 @@ var
     CombinationCheck := (Check = 0);
   end;
 
-  function CombinationCard(N: integer): string;//Combination card
+
+
+  function CombinationCard(N: integer): integer;//Combination card
   var
-    i, j, InI: integer;
+    i, R,i1, j, InI: integer;
     Comb: string;
     Check: boolean;
   begin
-    CombinationCard := '';
+    CombinationCard := 0;
     for InI := 1 to N do
     begin
       Dec(QuantityCards);
       Check := False;
       while Check <> True do
       begin
-        i := random(13) + 1;
-        j := random(4) + 1;
+        R := random(20);
+        for i1 := 1 to R do
+        begin
+          i := random(13) + 1;
+          j := random(4) + 1;
+        end;
         Comb := IntToStr(i) + IntToStr(j);
         Check := CombinationCheck(Comb);
+        if Card[i, j] = 0 then
+          Check := False;
       end;
       AddForbiddenCard(Comb);
-      CombinationCard += IntToStr(Card[i, j]) + ' ';
+      CombinationCard := Card[i, j];
     end;
-  end;
-
-
-  procedure ArrCards;//ArrayCards
-  var
-    i, j: integer;
-  begin
-    for i := 2 to 10 do
-      for j := 1 to 4 do
-        Card[i, j] := i;
-    for i := 11 to 13 do
-      for j := 1 to 4 do
-        Card[i, j] := 10;
-
-    for i := 1 to 100 do
-      for j := 1 to 20 do
-        CombinationPlayer[i, j] := '';
   end;
 
   procedure LoadDataStats;//Load GameStats
@@ -156,13 +193,12 @@ var
     Close(T);
   end;
 
-  procedure NewGame;//Start new game
+  procedure ReloadTable(QuantityCards: integer; QuantityPlayerInPlay: integer);
   var
     i, j: integer;
   begin
     ClearScreen;
     BJLabel;
-
     gotoXY(100, 10);
     writeln('Card deck: ', QuantityCards);
     gotoXY(100, 11);
@@ -171,15 +207,507 @@ var
     writeln('You: ', Name);
     gotoXY(100, 14);
     writeln('Your Cash: ', Cash, '$');
-    gotoXY(28, 15);
-    writeln('Bot');
-    gotoXY(28, 16);
-    CombinationCard(2);
-    gotoXY(28, 20);
+
+    for j := 2 to QuantityPlayerInPlay do
+      case j of
+        2:
+        begin
+          gotoXY(55, 13);
+          writeln('Petr');
+          gotoXY(55, 14);
+          for i := 1 to CombinationPlayer[2, 20] do
+            Write(CombinationPlayer[2, i], ' ');
+
+          CombinationPlayer[2, 19] := 0;
+          for i := 1 to CombinationPlayer[2, 20] do
+            CombinationPlayer[2, 19] :=
+              CombinationPlayer[2, 19] + CombinationPlayer[2][i];
+          gotoXY(61, 13);
+          writeln('|', CombinationPlayer[2, 19], '|');
+          if MakeBetSw = True then
+          begin
+            gotoXY(56, 16);
+            Write(CombinationPlayer[2, 17], '$');
+          end;
+        end;
+        3:
+        begin
+          gotoXY(40, 13);
+          writeln('Max');
+          gotoXY(40, 14);
+          for i := 1 to CombinationPlayer[3, 20] do
+            Write(CombinationPlayer[3, i], ' ');
+
+          CombinationPlayer[3, 19] := 0;
+          for i := 1 to CombinationPlayer[3, 20] do
+            CombinationPlayer[3, 19] :=
+              CombinationPlayer[3, 19] + CombinationPlayer[3][i];
+          gotoXY(45, 13);
+          writeln('|', CombinationPlayer[3, 19], '|');
+          if MakeBetSw = True then
+          begin
+            gotoXY(41, 16);
+            Write(CombinationPlayer[3, 17], '$');
+          end;
+        end;
+        4:
+        begin
+          gotoXY(71, 13);
+          writeln('Boy');
+          gotoXY(71, 14);
+          for i := 1 to CombinationPlayer[4, 20] do
+            Write(CombinationPlayer[4, i], ' ');
+          CombinationPlayer[4, 19] := 0;
+          for i := 1 to CombinationPlayer[4, 20] do
+            CombinationPlayer[4, 19] :=
+              CombinationPlayer[4, 19] + CombinationPlayer[4][i];
+          gotoXY(76, 13);
+          writeln('|', CombinationPlayer[4, 19], '|');
+          if MakeBetSw = True then
+          begin
+            gotoXY(72, 16);
+            Write(CombinationPlayer[4, 17], '$');
+          end;
+        end;
+      end;
+    if WinSel = True then
+    begin
+      gotoXY(59, 17);
+      Write('Win: ', Winner, ' !!!');
+    end;
+    gotoXY(39, 15);
+    Write('-----------------------------------------');
+    gotoXY(39, 19);
+    Write('-----------------------------------------');
+    gotoXY(55, 20);
     writeln(Name);
-    gotoXY(28, 21);
-    CombinationCard(2);
-    readln(i);
+    gotoXY(55, 21);
+    for i := 1 to CombinationPlayer[1, 20] do
+      Write(CombinationPlayer[1, i], ' ');
+    CombinationPlayer[1, 19] := 0;
+    for i := 1 to CombinationPlayer[1, 20] do
+      CombinationPlayer[1, 19] := CombinationPlayer[1, 19] + CombinationPlayer[1, i];
+    gotoXY(length(Name) + 56, 20);
+    writeln('|', CombinationPlayer[1, 19], '|');
+    if MakeBetSw = True then
+    begin
+      gotoXY(57, 18);
+      Write(CombinationPlayer[1, 17], '$');
+    end;
+
+    if MakeBetSw = True then
+    begin
+      gotoXY(84, 15);
+      Write('  Bank');
+      gotoXY(84, 16);
+      Write('----------');
+      gotoXY(84, 17);
+      Write('   ', Bank, '$');
+      gotoXY(84, 18);
+      Write('----------');
+    end;
+
+    Hide;
+  end;
+
+  procedure MakeBet;
+  var
+    Player, Bet: integer;
+  begin
+    Bank := 0;
+    MakeBetSw := True;
+    CombinationPlayer[1, 17] := 0;
+    while CombinationPlayer[1, 17] = 0 do
+    begin
+      gotoXY(59, 17);
+      Write('Your Bet: ');
+      gotoXY(59, 18);
+      Readln(Bet);
+
+      if Bet > CombinationPlayer[1, 18] then
+      begin
+        gotoXY(59, 18);
+        Write('        ');
+      end
+      else
+      begin
+        CombinationPlayer[1, 17] := Bet;
+        CombinationPlayer[1, 18] := CombinationPlayer[1, 18] - Bet;
+        Cash := Cash - Bet;
+        User[Position, 3] := IntToStr(Cash);
+      end;
+    end;
+
+    for  Player := 2 to QuantityPlayerInPlay do
+      case Player of
+        2:
+        begin
+          CombinationPlayer[2, 17] += random(CombinationPlayer[2, 18]);
+          CombinationPlayer[2, 18] :=
+            CombinationPlayer[2, 18] - CombinationPlayer[2, 17];
+        end;
+        3:
+        begin
+          CombinationPlayer[3, 17] += random(CombinationPlayer[3, 18]);
+          CombinationPlayer[3, 18] :=
+            CombinationPlayer[3, 18] - CombinationPlayer[3, 17];
+        end;
+        4:
+        begin
+          CombinationPlayer[4, 17] += random(CombinationPlayer[4, 18]);
+          CombinationPlayer[4, 18] :=
+            CombinationPlayer[4, 18] - CombinationPlayer[4, 17];
+        end;
+      end;
+    for i := 1 to QuantityPlayerInPlay do
+      Bank += CombinationPlayer[i, 17];
+    ReloadTable(QuantityCards, QuantityPlayerInPlay);
+  end;
+
+  procedure Win;
+  var
+    i, j, winpos, max: integer;
+    PlayeNotLose: array [1..100, 1..2] of integer;
+  begin
+    j := 0;
+    winpos := 0;
+
+    for i := 1 to QuantityPlayerInPlay do
+    begin
+      if CombinationPlayer[i, 19] <= 21 then
+      begin
+        Inc(j);
+        PlayeNotLose[j, 1] := CombinationPlayer[i, 19];
+        PlayeNotLose[j, 2] := i;
+      end;
+    end;
+
+    max := PlayeNotLose[1, 1];
+
+    for i := 1 to j do
+    begin
+      if max < PlayeNotLose[i, 1] then
+        max := PlayeNotLose[i, 1];
+    end;
+
+    for i := 1 to j do
+    begin
+      if max = PlayeNotLose[i, 1] then
+        winpos := PlayeNotLose[i, 2];
+    end;
+
+    case winpos of
+      0: Winner := 'NONE';
+      1:
+      begin
+        Winner := Name;
+        User[Position, 3] := IntToStr(StrToInt(User[Position, 3]) + Bank);
+        Cash := StrToInt(User[Position, 3]);
+      end;
+      2:
+      begin
+        Winner := 'Petr';
+        CombinationPlayer[2, 18] += Bank;
+      end;
+      3:
+      begin
+        Winner := 'Max';
+        CombinationPlayer[3, 18] += Bank;
+      end;
+      4:
+      begin
+        Winner := 'Boy';
+        CombinationPlayer[4, 18] += Bank;
+      end;
+    end;
+    WinSel := True;
+    HideMode := False;
+    ExportDataStats;
+    ReloadTable(QuantityCards, QuantityPlayerInPlay);
+  end;
+
+  procedure TakeCardBots;
+  var
+    Chance, Player: integer;
+  begin
+    for Player := 1 to QuantityPlayerInPlay do
+    begin
+      case Player of
+        2:
+        begin
+          if CombinationPlayer[2, 19] <= 10 then
+          begin
+            Inc(CombinationPlayer[2, 20]);
+            CombinationPlayer[2, CombinationPlayer[2, 20]] := CombinationCard(1);
+          end
+          else if (CombinationPlayer[2, 19] > 10) and
+            (CombinationPlayer[2, 19] <= 15) then
+          begin
+            Chance := random(2);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[2, 20]);
+              CombinationPlayer[2, CombinationPlayer[2, 20]] := CombinationCard(1);
+            end;
+          end
+          else if (CombinationPlayer[2, 19] > 15) and
+            (CombinationPlayer[2, 19] <= 19) then
+          begin
+            Chance := random(11);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[2, 20]);
+              CombinationPlayer[2, CombinationPlayer[2, 20]] := CombinationCard(1);
+            end;
+          end
+          else if (CombinationPlayer[2, 19] >= 20) and
+            (CombinationPlayer[2, 19] <= 21) then
+          begin
+            Chance := random(51);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[2, 20]);
+              CombinationPlayer[2, CombinationPlayer[2, 20]] := CombinationCard(1);
+            end;
+          end;
+        end;
+        3:
+        begin
+          if CombinationPlayer[3, 19] <= 10 then
+          begin
+            Inc(CombinationPlayer[3, 20]);
+            CombinationPlayer[3, CombinationPlayer[3, 20]] := CombinationCard(1);
+          end
+          else if (CombinationPlayer[3, 19] > 10) and
+            (CombinationPlayer[3, 19] <= 15) then
+          begin
+            Chance := random(2);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[3, 20]);
+              CombinationPlayer[3, CombinationPlayer[3, 20]] := CombinationCard(1);
+            end;
+          end
+          else if (CombinationPlayer[3, 19] > 15) and
+            (CombinationPlayer[3, 19] <= 18) then
+          begin
+            Chance := random(11);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[3, 20]);
+              CombinationPlayer[3, CombinationPlayer[3, 20]] := CombinationCard(1);
+            end;
+          end
+          else if (CombinationPlayer[3, 19] >= 19) and
+            (CombinationPlayer[3, 19] <= 21) then
+          begin
+            Chance := random(51);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[3, 20]);
+              CombinationPlayer[3, CombinationPlayer[3, 20]] := CombinationCard(1);
+            end;
+          end;
+        end;
+        4:
+        begin
+          if CombinationPlayer[4, 19] <= 10 then
+          begin
+            Inc(CombinationPlayer[4, 20]);
+            CombinationPlayer[4, CombinationPlayer[4, 20]] := CombinationCard(1);
+          end
+          else if (CombinationPlayer[4, 19] > 10) and
+            (CombinationPlayer[4, 19] <= 15) then
+          begin
+            Chance := random(2);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[4, 20]);
+              CombinationPlayer[4, CombinationPlayer[4, 20]] := CombinationCard(1);
+            end;
+          end
+          else if (CombinationPlayer[4, 19] > 15) and
+            (CombinationPlayer[4, 19] <= 19) then
+          begin
+            Chance := random(11);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[4, 20]);
+              CombinationPlayer[4, CombinationPlayer[4, 20]] := CombinationCard(1);
+            end;
+          end
+          else if (CombinationPlayer[4, 19] >= 20) and
+            (CombinationPlayer[4, 19] <= 21) then
+          begin
+            Chance := random(51);
+            if Chance = 0 then
+            begin
+              Inc(CombinationPlayer[4, 20]);
+              CombinationPlayer[4, CombinationPlayer[4, 20]] := CombinationCard(1);
+            end;
+          end;
+        end;
+      end;
+    end;
+    ReloadTable(QuantityCards, QuantityPlayerInPlay);
+  end;
+
+  procedure CheckLoos;
+  begin
+    if CombinationPlayer[1, 19] > 21 then
+    begin
+      TakeCardBots;
+      TakeCardBots;
+      Win;
+    end;
+  end;
+
+  procedure ArrCards;//ArrayCards
+  var
+    i, j: integer;
+  begin
+    ForbiddenCardNum := 0;
+    QuantityCards := 52;
+    NewGameBool := True;
+    WinSel := False;
+    HideMode := True;
+    MakeBetSw := False;
+
+    for i := 2 to 10 do
+      for j := 1 to 4 do
+        Card[i, j] := i;
+    for i := 11 to 13 do
+      for j := 1 to 4 do
+        Card[i, j] := 10;
+
+    for i := 1 to 100 do
+      for j := 1 to 18 do
+        CombinationPlayer[i, j] := 0;
+
+    for i := 1 to 100 do
+      CombinationPlayer[i, 20] := 2;
+
+
+    for i := 2 to 100 do
+      CombinationPlayer[i, 17] := 0;
+
+    for i := 1 to 100 do
+      ForbiddenCard[i] := '';
+  end;
+
+
+
+  procedure NewGame;//Start new game
+  var
+    i, j: integer;
+    AlvaysPlay: boolean;
+  begin
+    ClearScreen;
+    BJLabel;
+    AlvaysPlay := True;
+
+    if NewGameBool = True then
+    begin
+      for j := 1 to QuantityPlayerInPlay do
+      begin
+        CombinationPlayer[j, 1] := CombinationCard(1);
+        CombinationPlayer[j, 2] := CombinationCard(1);
+        CombinationPlayer[j, 18] := 100;
+      end;
+
+      CombinationPlayer[1, 18] := Cash;
+
+      for i := 1 to length(Loading) do
+      begin
+        Delay(500);
+        GotoXY(20, 55 + i);
+        Write(Loading[i]);
+      end;
+      ReloadTable(QuantityCards, QuantityPlayerInPlay);
+    end;
+
+    NewGameBool := False;
+    while AlvaysPlay = True do
+    begin
+
+      if WinSel = True then
+      begin
+        gotoXY(3, 25);
+        writeln('1. NEW GAME');
+        gotoXY(3, 26);
+        writeln('2. EXIT TO Menu');
+        gotoXY(3, 28);
+        Write('Select: ');
+        gotoXY(12, 28);
+        readln(i);
+        case i of
+          1:
+          begin
+            AlvaysPlay := False;
+            ArrCards;
+            NewGame;
+          end;
+          2:
+          begin
+            ExportDataStats;
+            MenuError := False;
+            NewGameError := True;
+            AlvaysPlay := False;
+          end;
+        end;
+      end
+      else
+      begin
+        gotoXY(3, 25);
+        writeln('1. Tack');
+        gotoXY(3, 26);
+        writeln('2. Pas');
+        gotoXY(3, 27);
+        writeln('3. MakeBet');
+        gotoXY(3, 28);
+        writeln('4. EXIT TO Menu');
+        gotoXY(3, 29);
+        Write('Select: ');
+        gotoXY(12, 29);
+        readln(i);
+        case i of
+          1:
+          begin
+            Inc(CombinationPlayer[1, 20]);
+            CombinationPlayer[1, CombinationPlayer[1, 20]] := CombinationCard(1);
+            ReloadTable(QuantityCards, QuantityPlayerInPlay);
+            CheckLoos;
+          end;
+          2:
+          begin
+            TakeCardBots;
+            TakeCardBots;
+            Win;
+          end;
+          3: MakeBet;
+          4:
+          begin
+            ExportDataStats;
+            MenuError := False;
+            NewGameError := True;
+            AlvaysPlay := False;
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  procedure StartGame;//Start new game
+  var
+    Start: string;
+  begin
+    ClearScreen;
+    BJLabel;
+    Write('Number of players "2-4" : ');
+    readln(QuantityPlayerInPlay);
+    Write('!=START ENTER=!');
+    readln(Start);
+    NewGame;
   end;
 
   procedure Stats;//Stats User
@@ -194,8 +722,7 @@ var
     begin
       Writeln(User[i, 1], ': ', User[i, 3], '$');
     end;
-    Write('');
-    Readln(stop);
+
   end;
 
   procedure MenuModSwicher;//Mod Swicher
@@ -207,6 +734,7 @@ var
       begin
         MS := True;
         MenuError := True;
+        ExportDataStats;
       end;
       4: Exit;
     end;
@@ -316,22 +844,25 @@ var
   end;
 
 begin
-  //LoadingWindow; //Loading Screen Window
+  LoadingWindow; //Loading Screen Window
   ClearScreen;//Clear Screen
   LoadDataStats;//Load Bas
   LoginGo:
     MenuMod := 0;
   LoginMod := 0;
-  ForbiddenCardNum := 0;
-  QuantityCards := 52;
+  for i := 2 to 100 do
+    CombinationPlayer[i, 18] := 100;
   LoginError := False;
   MenuError := False;
-  NewGameError := False;
+
   MS := False;
   while LoginError <> True do
   begin
     LoginAccaunt;
   end;
+
+  MenuGo:
+    NewGameError := False;
 
   while MenuError <> True do
   begin
@@ -344,13 +875,9 @@ begin
 
   while NewGameError <> True do
   begin
-    Write('Number of players "2-2" : ');
-    readln(QuantityPlayerInPlay);
-    Write('Start Enter');
-    readln(Start);
-    NewGame;
+    StartGame;
   end;
-
-
+  ExportDataStats;
+  goto MenuGo;
   ExportDataStats;
 end.
