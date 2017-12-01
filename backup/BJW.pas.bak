@@ -810,6 +810,7 @@ var
     NewGameBoolean := False;
     MakeBet;
     while AlvaysPlay = True do
+      //-------------------------------------------------------------
     begin
 
       if WinSelection = True then
@@ -947,9 +948,9 @@ var
       end;
     end;
 
-    gotoXY(11, 14);
+    gotoXY(12, 14);
     Write('!=START ENTER=!');
-    gotoXY(26, 14);
+    gotoXY(27, 14);
     readln(Start);
     ArrCards;
     NewGame;
@@ -988,11 +989,8 @@ var
   label
     RESTART;
   begin
-    ExportDataStats;
-    BJLabel;
     RESTART:
-    PMenuSelection:='';
-
+      BJLabel;
     gotoXY(26, 10);
     Writeln('|=============================|');
     gotoXY(26, 11);

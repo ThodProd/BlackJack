@@ -988,11 +988,8 @@ var
   label
     RESTART;
   begin
-    ExportDataStats;
-    BJLabel;
     RESTART:
-    PMenuSelection:='';
-
+      BJLabel;
     gotoXY(26, 10);
     Writeln('|=============================|');
     gotoXY(26, 11);
@@ -1025,7 +1022,7 @@ var
     gotoXY(3, 17);
     Writeln('|===================|');
     gotoXY(18, 16);
-    Readln(PMenuSelection);
+    Read(PMenuSelection);
     if CheckIntroducedSTR(PMenuSelection) then
       goto RESTART;
 
