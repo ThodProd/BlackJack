@@ -416,9 +416,9 @@ var
     end;
 
     gotoXY(12, 15);
-    Write('----------------------------------------------------------------------------------------------------');
+    Write('--------------------------------------------------------------------------------------------------');
     gotoXY(12, 19);
-    Write('----------------------------------------------------------------------------------------------------');
+    Write('--------------------------------------------------------------------------------------------------');
 
     gotoXY(58, 20);
     writeln(Player[PositionAccountInArray].NamePlayer);
@@ -988,8 +988,11 @@ var
   label
     RESTART;
   begin
+    ExportDataStats;
+    BJLabel;
     RESTART:
-      BJLabel;
+    PMenuSelection:='';
+
     gotoXY(26, 10);
     Writeln('|=============================|');
     gotoXY(26, 11);
@@ -1022,7 +1025,7 @@ var
     gotoXY(3, 17);
     Writeln('|===================|');
     gotoXY(18, 16);
-    Read(PMenuSelection);
+    Readln(PMenuSelection);
     if CheckIntroducedSTR(PMenuSelection) then
       goto RESTART;
 
