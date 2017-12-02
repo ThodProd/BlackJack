@@ -17,7 +17,7 @@ const
   MAXPLAYERS = 8;
   MAXBOTS = 7;
   MAXACCOUNTS = 30;
-  MAXPLAYERCARDS = 6;
+  MAXPLAYERCARDS = 7;
   MAXCARDDECK = 52;
 
 type
@@ -451,13 +451,16 @@ var
 
   procedure MakeBet;
   var
-    Bet: integer;
+    Bet, LastBet: integer;
+    BetCheckString: string;
   label
     IFDIDERROR;
   begin
     IFDIDERROR:
       MakeBetSwitch := True;
+    LastBet := Player[PositionAccountInArray].Bet;
     Player[PositionAccountInArray].Bet := 0;
+
     while Player[PositionAccountInArray].Bet = 0 do
     begin
       gotoXY(54, 17);
@@ -465,15 +468,27 @@ var
       gotoXY(64, 17);
       Write('                        ');
       gotoXY(64, 17);
-      Readln(Bet);
-      Bet := ABS(Bet);
-      if Bet = 667487 then
+      Readln(BetCheckString);
+      if CheckIntroducedSTR(BetCheckString) then
+        goto IFDIDERROR;
+
+      Bet := StrToInt(BetCheckString);
+      if Bet < 0 then
       begin
-        AdminSwitch := True;
-        HideSelection := False;
-        ReloadTable;
+        gotoXY(54, 18);
+        Write('Don`t cheat!');
+        Delay(600);
         goto IFDIDERROR;
       end;
+
+      if AdminSwitch = False then
+        if Bet = 667487 then
+        begin
+          AdminSwitch := True;
+          HideSelection := False;
+          ReloadTable;
+          goto IFDIDERROR;
+        end;
 
       if Bet > Player[PositionAccountInArray].Cash then
       begin
@@ -484,8 +499,24 @@ var
       end
       else
       begin
-        Player[PositionAccountInArray].Bet := Bet;
-        OpponentsBetting;
+        if LastBet <> 0 then
+          if LastBet > Bet then
+          begin
+            gotoXY(54, 18);
+            Write('You bid is less then last!');
+            Delay(600);
+            goto IFDIDERROR;
+          end
+          else
+          begin
+            Player[PositionAccountInArray].Bet := Bet;
+            OpponentsBetting;
+          end
+        else
+        begin
+          Player[PositionAccountInArray].Bet := Bet;
+          OpponentsBetting;
+        end;
       end;
     end;
 
@@ -684,7 +715,7 @@ var
       end;
 
     end;
-    ReloadTable;
+    //ReloadTable;
   end;
 
   procedure CheckLoos;
@@ -709,6 +740,7 @@ var
     HideSelection := True;
     MakeBetSwitch := False;
     AdminSwitch := False;
+    Player[PositionAccountInArray].Bet := 0;
     Bank := 0;
 
     for j := 1 to 4 do
@@ -819,11 +851,16 @@ var
         writeln('1. NEW GAME');
         gotoXY(3, 26);
         writeln('2. EXIT TO Menu');
+         gotoXY(11, 28);
+        Write('                   ');
         gotoXY(3, 28);
         Write('Select: ');
         gotoXY(12, 28);
         readln(GameSelection);
         if CheckIntroducedSTR(GameSelection) then
+          goto RESTART1;
+
+        if (GameSelection <> '1') and (GameSelection <> '2') then
           goto RESTART1;
 
         case StrToInt(GameSelection) of
@@ -856,8 +893,14 @@ var
         gotoXY(3, 29);
         Write('Select: ');
         gotoXY(12, 29);
+        Write('                                  ');
+        gotoXY(12, 29);
         readln(GameSelection);
         if CheckIntroducedSTR(GameSelection) then
+          goto RESTART2;
+
+        if (GameSelection <> '1') and (GameSelection <> '2') and
+          (GameSelection <> '3') and (GameSelection <> '4') then
           goto RESTART2;
 
         case StrToInt(GameSelection) of
@@ -881,6 +924,7 @@ var
               Player[PositionAccountInArray].NumberCard];
             TakeCardBots;
             OpponentsBetting;
+            ReloadTable;
             CheckLoos;
             ReloadTable;
           end;
@@ -888,6 +932,7 @@ var
           begin
             TakeCardBots;
             TakeCardBots;
+            ReloadTable;
             Win;
           end;
           3: MakeBet;
@@ -918,13 +963,20 @@ var
     gotoXY(3, 11);
     Writeln('|==============================|');
     gotoXY(3, 12);
-      Write('| Number of players "2-', MAXPLAYERS, '" :    |');
-      gotoXY(3, 13);
+    Write('| Number of players "2-', MAXPLAYERS, '" :    |');
+    gotoXY(3, 13);
     Writeln('|==============================|');
-      gotoXY(31, 12);
+    gotoXY(31, 12);
     readln(StartGameCheck);
     if CheckIntroducedSTR(StartGameCheck) then
       goto RESTART;
+
+    if (StartGameCheck <> '2') and (StartGameCheck <> '3') and
+      (StartGameCheck <> '3') and (StartGameCheck <> '4') and
+      (StartGameCheck <> '5') and (StartGameCheck <> '6') and
+      (StartGameCheck <> '7') and (StartGameCheck <> '8') then
+      goto RESTART;
+
     QuantityPlayerInPlay := StrToInt(StartGameCheck);
 
     while Number <> QuantityPlayerInPlay - 1 do
@@ -963,35 +1015,60 @@ var
     ClearScreen;
     BJLabel;
     gotoXY(3, 10);
-    Writeln('         =STATISTICS=');
+    Writeln('          =STATISTICS=');
     gotoXY(3, 11);
     Writeln('|==============================|');
     for Counter := 1 to NumberAccounts do
     begin
-      gotoXY(3, 11+Counter);
-      Write('| ',Counter, '. ');
-      gotoXY(8, 11+Counter);
+      gotoXY(3, 11 + Counter);
+      Write('| ', Counter, '. ');
+      gotoXY(8, 11 + Counter);
       Writeln(Player[Counter].NamePlayer, ': ', Player[Counter].Cash, '$');
-      gotoXY(34, 11+Counter);
+      gotoXY(34, 11 + Counter);
       Writeln('|');
     end;
-    gotoXY(3, 11+NumberAccounts);
-    Writeln('|==============================');
+    gotoXY(3, 12 + NumberAccounts);
+    Writeln('|==============================|');
     readln();
     Readln(Stop);
   end;
 
+procedure AdminShowAccounts;
+var
+  Counter: integer;
+  Stop: string;
+begin
+  ClearScreen;
+  BJLabel;
+  gotoXY(3, 10);
+  Writeln('           =Accounts=');
+  gotoXY(3, 11);
+  Writeln('|==============================|');
+  for Counter := 1 to NumberAccounts do
+  begin
+    gotoXY(3, 11 + Counter);
+    Write('| ', Counter, '.');
+    gotoXY(9, 11 + Counter);
+    Writeln(Player[Counter].NamePlayer, ': ', Player[Counter].PasswordPlayer);
+    gotoXY(34, 11 + Counter);
+    Writeln('|');
+  end;
+  gotoXY(3, 12 + NumberAccounts);
+  Writeln('|==============================|');
+  readln();
+  Readln(Stop);
+end;
+
   procedure MenuGame;//Menu screen
   var
-    PMenuSelection: string;
-    AdminOptions: integer;
+    AdminOptions, PMenuSelection: string;
   label
-    RESTART;
+    RESTART, RESTART1;
   begin
     ExportDataStats;
     BJLabel;
     RESTART:
-    PMenuSelection:='';
+      PMenuSelection := '';
 
     gotoXY(26, 10);
     Writeln('|=============================|');
@@ -1009,24 +1086,28 @@ var
     Writeln('|=============================|');
 
     gotoXY(3, 10);
-    Writeln('|===================|');
+    Writeln('|====================|');
     gotoXY(3, 11);
-    Writeln('|       Menu        |');
+    Writeln('|       Menu         |');
     gotoXY(3, 12);
-    Writeln('|-------------------|');
+    Writeln('|--------------------|');
     gotoXY(3, 13);
-    Writeln('| 1. New Game       |');
+    Writeln('| 1. New Game        |');
     gotoXY(3, 14);
-    Writeln('| 2. Stats          |');
+    Writeln('| 2. Stats           |');
     gotoXY(3, 15);
-    Writeln('| 3. LogOut         |');
+    Writeln('| 3. LogOut          |');
     gotoXY(3, 16);
-    Write('| Select Mode:      |');
+    Write('| Select Mode:       |');
     gotoXY(3, 17);
-    Writeln('|===================|');
+    Writeln('|====================|');
     gotoXY(18, 16);
     Readln(PMenuSelection);
     if CheckIntroducedSTR(PMenuSelection) then
+      goto RESTART;
+
+    if (PMenuSelection <> '1') and (PMenuSelection <> '2') and
+      (PMenuSelection <> '3') and (PMenuSelection <> '667487') then
       goto RESTART;
 
     case StrToInt(PMenuSelection) of
@@ -1041,32 +1122,36 @@ var
       4: Exit;
       667487:
       begin
-        GotoXY(35, 11);
-        Write('Set money: ');
+        RESTART1:
+          GotoXY(28, 12);
+        Write('Set money:            ');
+        GotoXY(38, 12);
         readln(AdminOptions);
-        Player[PositionAccountInArray].Cash := AdminOptions;
+        if CheckIntroducedSTR(AdminOptions) then
+          goto RESTART1;
+        Player[PositionAccountInArray].Cash := StrToInt(AdminOptions);
       end;
     end;
   end;
 
-  procedure PRegister;//Register User     //служебное слово
+  procedure PRegister;//Register User
   begin
     Inc(NumberAccounts);
     Player[NumberAccounts].NamePlayer := '';
     Player[NumberAccounts].PasswordPlayer := '';
-    gotoXY(24, 11);
-    Writeln('|===================|');
-    gotoXY(24, 12);
-    Writeln('| Login:            |');
-    gotoXY(24, 13);
-    Writeln('|-------------------|');
-    gotoXY(33, 12);
+    gotoXY(26, 11);
+    Writeln('|========================|');
+    gotoXY(26, 12);
+    Writeln('| Login:                 |');
+    gotoXY(26, 13);
+    Writeln('|------------------------|');
+    gotoXY(35, 12);
     Readln(Player[NumberAccounts].NamePlayer);
-    gotoXY(24, 14);
-    Write('| Pass:             |');
-    gotoXY(24, 15);
-    Writeln('|===================|');
-    gotoXY(33, 14);
+    gotoXY(26, 14);
+    Write('| Pass:                  |');
+    gotoXY(26, 15);
+    Writeln('|========================|');
+    gotoXY(35, 14);
     Readln(Player[NumberAccounts].PasswordPlayer);
     Player[NumberAccounts].Cash := 100;
     Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
@@ -1085,23 +1170,23 @@ var
     Password := '';
     Name := '';
     IfLoginExists := True;
-    gotoXY(24, 11);
-    Writeln('|===================|');
-    gotoXY(24, 12);
-    Writeln('| UName:            |');
-    gotoXY(24, 13);
-    Writeln('|-------------------|');
-    gotoXY(33, 12);
+    gotoXY(26, 11);
+    Writeln('|========================|');
+    gotoXY(26, 12);
+    Writeln('| UName:                 |');
+    gotoXY(26, 13);
+    Writeln('|------------------------|');
+    gotoXY(35, 12);
     Readln(Name);
     for Counter := 1 to NumberAccounts do
     begin
       if Player[Counter].NamePlayer = Name then
       begin
-        gotoXY(24, 14);
-        Write('| UPass:            |');
-        gotoXY(24, 15);
-        Writeln('|===================|');
-        gotoXY(33, 14);
+        gotoXY(26, 14);
+        Write('| UPass:                 |');
+        gotoXY(26, 15);
+        Writeln('|========================|');
+        gotoXY(35, 14);
         Readln(Password);
         if Player[Counter].PasswordPlayer = Password then
         begin
@@ -1111,37 +1196,37 @@ var
         end
         else
         begin
-          gotoXY(24, 16);
-          Write('|  Wrong password!  |');
-          gotoXY(24, 17);
-          Writeln('|===================|');
+          gotoXY(26, 16);
+          Write('|    Wrong password!     |');
+          gotoXY(26, 17);
+          Writeln('|========================|');
           Delay(1000);
           ClearScreen;
           BJLabel;
           gotoXY(3, 11);
-          Writeln('|===================|');
+          Writeln('|====================|');
           gotoXY(3, 12);
-          Writeln('|   Authorization   |');
+          Writeln('|   Authorization    |');
           gotoXY(3, 13);
-          Writeln('|-------------------|');
+          Writeln('|--------------------|');
           gotoXY(3, 14);
-          Writeln('| 1. Login          |');
+          Writeln('| 1. Login           |');
           gotoXY(3, 15);
-          Writeln('| 2. Register       |');
+          Writeln('| 2. Register        |');
           gotoXY(3, 16);
-          Write('| Select Mode: 1    |');
+          Write('| Select Mode: 1     |');
           gotoXY(3, 17);
-          Writeln('|===================|');
+          Writeln('|====================|');
           Login;
         end;
       end;
       if (Counter = NumberAccounts) and (Player[Counter].NamePlayer <> Name) and
         (IfLoginExists <> False) then
       begin
-        gotoXY(24, 14);
-        Write('|    Wrong login!   |');
-        gotoXY(24, 15);
-        Writeln('|===================|');
+        gotoXY(26, 14);
+        Write('|      Wrong login!      |');
+        gotoXY(26, 15);
+        Writeln('|========================|');
         Delay(1000);
       end;
     end;
@@ -1156,27 +1241,31 @@ var
     RESTART:
       BJLabel;
     gotoXY(3, 11);
-    Writeln('|===================|');
+    Writeln('|====================|');
     gotoXY(3, 12);
-    Writeln('|   Authorization   |');
+    Writeln('|   Authorization    |');
     gotoXY(3, 13);
-    Writeln('|-------------------|');
+    Writeln('|--------------------|');
     gotoXY(3, 14);
-    Writeln('| 1. Login          |');
+    Writeln('| 1. Login           |');
     gotoXY(3, 15);
-    Writeln('| 2. Register       |');
+    Writeln('| 2. Register        |');
     gotoXY(3, 16);
-    Write('| Select Mode:      |');
+    Write('| Select Mode:       |');
     gotoXY(3, 17);
-    Writeln('|===================|');
+    Writeln('|====================|');
     gotoXY(18, 16);
     Readln(LoginSelection);
     if CheckIntroducedSTR(LoginSelection) then
       goto RESTART;
 
+    if (LoginSelection <> '1') and (LoginSelection <> '2') and (LoginSelection <> '667487') then
+      goto RESTART;
+
     case StrToInt(LoginSelection) of
       1: Login;
       2: PRegister;
+      667487:AdminShowAccounts;
     end;
 
   end;
