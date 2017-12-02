@@ -26,7 +26,7 @@ type
 
 type
   TPlayer = record
-    Cards: array [1..MAXPLAYERCARDS] of integer;    //Массив карт
+    Cards: array [1..MAXPLAYERCARDS] of word;    //Массив карт
     SumValuesCard: word;                            //Сумма всех карт
     NumberCard: 0..MAXPLAYERCARDS;                  //Количество карт
     Cash: integer;                                  //Бабло
@@ -107,32 +107,6 @@ var
     Writeln('___¶¶____________¶_______________________¶_____¶');
     Writeln('____¶¶¶_________¶________________________¶_____¶');
     Writeln('_______¶¶¶____¶¶¶¶¶____________________¶¶______¶');
-  end;
-
-  procedure Whore2;
-  begin
-    Writeln('    █████████');
-    Writeln('    ███████████');
-    Writeln('   █████████████');
-    Writeln(' ████████████████');
-    Writeln('█████████   ██████');
-    Writeln('████████      ████');
-    Writeln('███████        ████');
-    Writeln('█████████   ██████');
-    Writeln('██████   █  █   ███');
-    Writeln('█████ ▐█▌ ▓  ▐█▌ ██');
-    Writeln('█████ ▐█▌ ▓  ▐█▌ ██');
-    Writeln('████             ███');
-    Writeln('████      ▓▄     ███');
-    Writeln('█████            ███');
-    Writeln('██████   ▓▀▀▓   ████');
-    Writeln('███████   ▀▀   ████');
-    Writeln('███████▓      █████');
-    Writeln('██████      ███████');
-    Writeln('████        ███████');
-    Writeln('███▓        ██████');
-    Writeln('██▓▓▓        █████');
-    Writeln('█▓▓▓▓▓▓▓▓▓▓▓▓▓▓███');
   end;
 
   procedure LoadingLaod;
@@ -470,7 +444,10 @@ var
       gotoXY(64, 17);
       Readln(BetCheckString);
       if CheckIntroducedSTR(BetCheckString) then
+      begin
+        ReloadTable;
         goto IFDIDERROR;
+      end;
 
       Bet := StrToInt(BetCheckString);
       if Bet < 0 then
@@ -532,14 +509,16 @@ var
     try
       j := 0;
       WinPosition := 0;
-      Max:=0;
+      Max := 0;
       SumValueCards;
       HideSelection := False;
 
-      for CounterPlayer:=1 to MAXPLAYERS do PlayerWins[CounterPlayer]:=0;
+      for CounterPlayer := 1 to MAXPLAYERS do
+        PlayerWins[CounterPlayer] := 0;
 
-      for CounterPlayer:=1 to MAXPLAYERS do
-      for i:=1 to 2 do PlayerNotLose[CounterPlayer,i]:=0;
+      for CounterPlayer := 1 to MAXPLAYERS do
+        for i := 1 to 2 do
+          PlayerNotLose[CounterPlayer, i] := 0;
 
       for i := 1 to QuantityPlayerInPlay - 1 do
       begin
@@ -576,10 +555,10 @@ var
 
       if WinPosition <> 0 then
       begin
-      Winner := Player[WinPosition].NamePlayer + '!';
+        Winner := Player[WinPosition].NamePlayer + '!';
 
-      PlayerWins[NumberSimbolsInString(Winner, '!')] :=
-        Player[WinPosition].NumberPlayerInArray;
+        PlayerWins[NumberSimbolsInString(Winner, '!')] :=
+          Player[WinPosition].NumberPlayerInArray;
       end;
 
       Player[PositionAccountInArray].Cash :=
@@ -595,26 +574,26 @@ var
 
       if WinPosition <> 0 then
       begin
-      for CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
-      begin
-        if Player[WinPosition].NumberPlayerInArray <>
-          PlayerNotLose[CounterPlayer, 2] then
-          if Player[WinPosition].SumValuesCard =
-            PlayerNotLose[CounterPlayer, 1] then
-          begin
-            Winner += ' ' + Player[PlayerNotLose[CounterPlayer, 2]].NamePlayer + '!';
-            PlayerWins[NumberSimbolsInString(Winner, '!')] :=
-              PlayerNotLose[CounterPlayer, 2];
-          end;
-      end;
-
-
-      if Winner <> '' then
-        for CounterPlayer := 1 to NumberSimbolsInString(Winner, '!') do
+        for CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
         begin
-          Player[PlayerWins[CounterPlayer]].Cash +=
-            Trunc(Bank / NumberSimbolsInString(Winner, '!'));
+          if Player[WinPosition].NumberPlayerInArray <>
+            PlayerNotLose[CounterPlayer, 2] then
+            if Player[WinPosition].SumValuesCard =
+              PlayerNotLose[CounterPlayer, 1] then
+            begin
+              Winner += ' ' + Player[PlayerNotLose[CounterPlayer, 2]].NamePlayer + '!';
+              PlayerWins[NumberSimbolsInString(Winner, '!')] :=
+                PlayerNotLose[CounterPlayer, 2];
+            end;
         end;
+
+
+        if Winner <> '' then
+          for CounterPlayer := 1 to NumberSimbolsInString(Winner, '!') do
+          begin
+            Player[PlayerWins[CounterPlayer]].Cash +=
+              Trunc(Bank / NumberSimbolsInString(Winner, '!'));
+          end;
       end;
 
       if Winner = '' then
@@ -768,7 +747,7 @@ var
     AdminSwitch := False;
     Player[PositionAccountInArray].Bet := 0;
     Bank := 0;
-    Winner:='';
+    Winner := '';
 
     for j := 1 to 4 do
       CardDeck[1, j] := 0;
@@ -1052,10 +1031,10 @@ var
       gotoXY(3, 12 + Counter);
       Write('| ', Counter, '. ');
 
-     gotoXY(9, 12 + Counter);
-      Write('| ',Player[Counter].NamePlayer);
+      gotoXY(9, 12 + Counter);
+      Write('| ', Player[Counter].NamePlayer);
 
-       gotoXY(28, 12 + Counter);
+      gotoXY(28, 12 + Counter);
       Writeln(' : ', Player[Counter].Cash, '$');
 
       gotoXY(38, 12 + Counter);
@@ -1086,7 +1065,7 @@ var
       Write('| ', Counter, '.');
 
       gotoXY(9, 12 + Counter);
-      Write('| ',Player[Counter].NamePlayer);
+      Write('| ', Player[Counter].NamePlayer);
 
       gotoXY(28, 12 + Counter);
       Write(': ', Player[Counter].PasswordPlayer);
@@ -1094,7 +1073,7 @@ var
       gotoXY(36, 12 + Counter);
       Writeln(' : ', Player[Counter].Cash, '$');
 
-      gotoXY(36+10, 12 + Counter);
+      gotoXY(36 + 10, 12 + Counter);
       Writeln('|');
     end;
     gotoXY(3, 13 + NumberAccounts);
@@ -1179,10 +1158,17 @@ var
   end;
 
   procedure PRegister;//Register User
+  var
+    Name: string;
+    GoNaxt: boolean;
+    CounterPlayer: integer;
   begin
     Inc(NumberAccounts);
     Player[NumberAccounts].NamePlayer := '';
     Player[NumberAccounts].PasswordPlayer := '';
+    Name := '';
+    GoNaxt := True;
+
     gotoXY(26, 11);
     Writeln('|========================|');
     gotoXY(26, 12);
@@ -1190,20 +1176,36 @@ var
     gotoXY(26, 13);
     Writeln('|------------------------|');
     gotoXY(35, 12);
-    Readln(Player[NumberAccounts].NamePlayer);
-    gotoXY(26, 14);
-    Write('| Pass:                  |');
-    gotoXY(26, 15);
-    Writeln('|========================|');
-    gotoXY(35, 14);
-    Readln(Player[NumberAccounts].PasswordPlayer);
-    Player[NumberAccounts].Cash := 100;
-    Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
-    PositionAccountInArray := Player[NumberAccounts].NumberPlayerInArray;
-    ExportDataStats;
-    LoginSelection := True;
-  end;
+    Readln(Name);
+    for CounterPlayer := 1 to NumberAccounts - 1 do
+      if Name = Player[CounterPlayer].NamePlayer then
+        GoNaxt := False;
 
+    if GoNaxt = False then
+    begin
+      Dec(NumberAccounts);
+      gotoXY(26, 14);
+      Write('| Login is already taken!|');
+      gotoXY(26, 15);
+      Writeln('|========================|');
+      PRegister;
+    end
+    else
+    begin
+      Player[NumberAccounts].NamePlayer := Name;
+      gotoXY(26, 14);
+      Write('| Pass:                  |');
+      gotoXY(26, 15);
+      Writeln('|========================|');
+      gotoXY(35, 14);
+      Readln(Player[NumberAccounts].PasswordPlayer);
+      Player[NumberAccounts].Cash := 100;
+      Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
+      PositionAccountInArray := Player[NumberAccounts].NumberPlayerInArray;
+      ExportDataStats;
+      LoginSelection := True;
+    end;
+  end;
 
   procedure Login;//Login User
   var
