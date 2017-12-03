@@ -17,7 +17,7 @@ const
   MAXPLAYERS = 8;
   MAXBOTS = 7;
   MAXACCOUNTS = 30;
-  MAXPLAYERCARDS = 7;
+  MAXPLAYERCARDS = 8;
   MAXCARDDECK = 52;
 
 type
@@ -26,19 +26,19 @@ type
 
 type
   TPlayer = record
-    Cards: array [1..MAXPLAYERCARDS] of word;    //Массив карт
-    SumValuesCard: word;                            //Сумма всех карт
-    NumberCard: 0..MAXPLAYERCARDS;                  //Количество карт
-    Cash: integer;                                  //Бабло
-    Bet: integer;                                   //Ставка игрока
-    NamePlayer: string;                             //Имя игрока
-    PasswordPlayer: string;                         //Пароль игрока
-    NumberPlayerInArray: word;                      //Порядковый номер игрока в файле
+    Cards: array [1..MAXPLAYERCARDS] of word;           //Массив карт
+    SumValuesCard: word;                                //Сумма всех карт
+    NumberCard: 0..MAXPLAYERCARDS;                      //Количество карт
+    Cash: integer;                                      //Бабло
+    Bet: integer;                                       //Ставка игрока
+    NamePlayer: string;                                 //Имя игрока
+    PasswordPlayer: string;                             //Пароль игрока
+    NumberPlayerInArray: word;                          //Порядковый номер игрока в файле
   end;
 
 
 var
-  Winner: string;     //много стрингов
+  Winner: string[100];
   MenuSelection, LoginSelection, NewGameSelection, NewGameBoolean,
   WinSelection, HideSelection, MakeBetSwitch, LogOutSwitch, AdminSwitch: boolean;
   Player: array [1..MAXACCOUNTS] of TPlayer;
@@ -229,6 +229,21 @@ var
     end;
   end;
 
+  procedure RecountDeck;
+  var
+    CounterPlayer, TotalNumberCards: integer;
+  begin
+    SumValueCards;
+    TotalNumberCards := 0;
+    QuantityCards := 0;
+    for CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
+    begin
+      TotalNumberCards += Player[WhatPlayersInGame[CounterPlayer]].NumberCard;
+    end;
+    TotalNumberCards += Player[PositionAccountInArray].NumberCard;
+    QuantityCards := MAXCARDDECK - TotalNumberCards;
+  end;
+
   procedure AddForbiddenCard(Comb: string);//AddForbiddenCard
   begin
     Inc(ForbiddenCardNumber);
@@ -255,7 +270,6 @@ var
     Check: boolean;
   begin
     CombinationCard := 0;
-    Dec(QuantityCards);
     Check := False;
     Randomize;
     i := 0;
@@ -263,7 +277,7 @@ var
 
     while Check <> True do
     begin
-      R := random(20);
+      R := random(20) + 1;
       for i1 := 1 to R do
       begin
         i := random(13) + 1;
@@ -337,6 +351,7 @@ var
     BJLabel;
     SumValueCards;
     PositionXY := 12;
+    RecountDeck;
     gotoXY(90, 23);
     writeln('Card deck: ', QuantityCards);
     gotoXY(90, 24);
@@ -371,7 +386,8 @@ var
 
       gotoXY(Length(Player[WhatPlayersInGame[j]].NamePlayer) + PositionXY + 1, 13);
       if HideSelection <> True then
-        writeln('|', Player[WhatPlayersInGame[j]].SumValuesCard, '|')
+        writeln('|', Player[WhatPlayersInGame[j]].NumberCard, '|')
+      //====   writeln('|', Player[WhatPlayersInGame[j]].SumValuesCard, '|')
       else
         writeln('|XX|');
 
@@ -401,7 +417,8 @@ var
       Write(Player[PositionAccountInArray].Cards[i], ' ');
 
     gotoXY(length(Player[PositionAccountInArray].NamePlayer) + 59, 20);
-    writeln('|', Player[PositionAccountInArray].SumValuesCard, '|');
+    writeln('|', Player[PositionAccountInArray].NumberCard, '|');
+    //  writeln('|', Player[PositionAccountInArray].SumValuesCard, '|');
 
     if MakeBetSwitch = True then
     begin
@@ -842,6 +859,7 @@ var
         GotoXY(20, 55 + i);
         Write(Loading[i]);
       end;
+      RecountDeck;
       ReloadTable;
     end;
 
@@ -883,6 +901,7 @@ var
             NewGameSelection := True;
             AlvaysPlay := False;
           end;
+          667487: ReloadTable;
         end;
       end
       else
