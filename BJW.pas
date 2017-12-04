@@ -19,6 +19,8 @@ const
   MAXACCOUNTS = 30;
   MAXPLAYERCARDS = 8;
   MAXCARDDECK = 52;
+  COLORBACKGROUND = green;
+  TEXTCOLORS = white;
 
 type
   TSuit = (sDiamonds, sHearts, sSpades, sClubs);
@@ -50,10 +52,12 @@ var
   T: Text;
 
   procedure LoginAccount; forward;
+  procedure MenuGame; forward;
 
   procedure BJLabel;//Show Label
   begin
-    textbackground(Green);
+    TextBackground(COLORBACKGROUND);
+    TextColor(TEXTCOLORS);
     clrscr;
     gotoxy(1, 1);
     Writeln(
@@ -884,6 +888,10 @@ var
         Write('Select: ');
         gotoXY(12, 28);
         readln(GameSelection);
+
+        if GameSelection = 'Beck' then
+          MenuGame;
+
         if CheckIntroducedSTR(GameSelection) then
           goto RESTART1;
 
@@ -924,6 +932,13 @@ var
         Write('                                  ');
         gotoXY(12, 29);
         readln(GameSelection);
+
+        if GameSelection = 'Beck' then
+        begin
+          Win;
+          MenuGame;
+        end;
+
         if CheckIntroducedSTR(GameSelection) then
           goto RESTART2;
 
@@ -996,6 +1011,10 @@ var
     Writeln('|==============================|');
     gotoXY(31, 12);
     readln(StartGameCheck);
+
+    if StartGameCheck = 'Beck' then
+      MenuGame;
+
     if CheckIntroducedSTR(StartGameCheck) then
       goto RESTART;
 
@@ -1175,6 +1194,7 @@ var
         if CheckIntroducedSTR(AdminOptions) then
           goto RESTART1;
         Player[PositionAccountInArray].Cash := StrToInt(AdminOptions);
+        ExportDataStats;
       end;
     end;
   end;
@@ -1256,7 +1276,7 @@ var
       if Player[Counter].NamePlayer = Name then
       begin
         gotoXY(26, 14);
-        Write('| UPass:                 |'#3);
+        Write('| UPass:                 |');
         gotoXY(26, 15);
         Writeln('|========================|');
         gotoXY(35, 14);
@@ -1274,6 +1294,7 @@ var
           gotoXY(26, 17);
           Writeln('|========================|');
           Delay(1000);
+          Password := '';
           ClearScreen;
           BJLabel;
           LoginAccount;
