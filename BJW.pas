@@ -49,6 +49,8 @@ var
   ForbiddenCardNumber, Bank: integer;
   T: Text;
 
+  procedure LoginAccount; forward;
+
   procedure BJLabel;//Show Label
   begin
     textbackground(Green);
@@ -386,8 +388,7 @@ var
 
       gotoXY(Length(Player[WhatPlayersInGame[j]].NamePlayer) + PositionXY + 1, 13);
       if HideSelection <> True then
-        writeln('|', Player[WhatPlayersInGame[j]].NumberCard, '|')
-      //====   writeln('|', Player[WhatPlayersInGame[j]].SumValuesCard, '|')
+        writeln('|', Player[WhatPlayersInGame[j]].SumValuesCard, '|')
       else
         writeln('|XX|');
 
@@ -417,8 +418,7 @@ var
       Write(Player[PositionAccountInArray].Cards[i], ' ');
 
     gotoXY(length(Player[PositionAccountInArray].NamePlayer) + 59, 20);
-    writeln('|', Player[PositionAccountInArray].NumberCard, '|');
-    //  writeln('|', Player[PositionAccountInArray].SumValuesCard, '|');
+    writeln('|', Player[PositionAccountInArray].SumValuesCard, '|');
 
     if MakeBetSwitch = True then
     begin
@@ -644,98 +644,101 @@ var
   begin
     for PlayerCounter := 1 to QuantityPlayerInPlay - 1 do
     begin
-
-      CombinationCardChoice := CombinationCard;
-      if CombinationCardChoice = 0 then
-        if ((Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard +
-          11) > 21) then
-          CombinationCardChoice := 1
-        else
-          CombinationCardChoice := 11;
-
-
-      if Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 11 then
+      if Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 21 then
       begin
-        Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-        Player[WhatPlayersInGame[PlayerCounter]].Cards[
-          Player[WhatPlayersInGame[PlayerCounter]].NumberCard] := CombinationCardChoice;
-      end
 
-      else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard >= 12) and
-        (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 15) then
-      begin
-        Chance := random(2);
-        if Chance <> 0 then
+        CombinationCardChoice := CombinationCard;
+        if CombinationCardChoice = 0 then
+          if ((Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard +
+            11) > 21) then
+            CombinationCardChoice := 1
+          else
+            CombinationCardChoice := 11;
+
+
+        if Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 11 then
+        begin
+          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+          Player[WhatPlayersInGame[PlayerCounter]].Cards[
+            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+            CombinationCardChoice;
+        end
+
+        else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard >= 12) and
+          (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 15) then
+        begin
           Chance := random(2);
-        if Chance = 0 then
-        begin
-          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-          Player[WhatPlayersInGame[PlayerCounter]].Cards[
-            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
-            CombinationCardChoice;
-        end;
-      end
+          if Chance <> 0 then
+            Chance := random(2);
+          if Chance = 0 then
+          begin
+            Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+            Player[WhatPlayersInGame[PlayerCounter]].Cards[
+              Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+              CombinationCardChoice;
+          end;
+        end
 
-      else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 15) then
-      begin
-        Chance := random(2);
-        if Chance = 0 then
+        else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 15) then
         begin
-          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-          Player[WhatPlayersInGame[PlayerCounter]].Cards[
-            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
-            CombinationCardChoice;
-        end;
-      end
+          Chance := random(2);
+          if Chance = 0 then
+          begin
+            Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+            Player[WhatPlayersInGame[PlayerCounter]].Cards[
+              Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+              CombinationCardChoice;
+          end;
+        end
 
-      else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 16) then
-      begin
-        Chance := random(5);
-        if Chance = 0 then
+        else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 16) then
         begin
-          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-          Player[WhatPlayersInGame[PlayerCounter]].Cards[
-            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
-            CombinationCardChoice;
-        end;
-      end
+          Chance := random(5);
+          if Chance = 0 then
+          begin
+            Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+            Player[WhatPlayersInGame[PlayerCounter]].Cards[
+              Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+              CombinationCardChoice;
+          end;
+        end
 
-      else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 17) then
-      begin
-        Chance := random(11);
-        if Chance = 0 then
+        else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 17) then
         begin
-          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-          Player[WhatPlayersInGame[PlayerCounter]].Cards[
-            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
-            CombinationCardChoice;
-        end;
-      end
+          Chance := random(11);
+          if Chance = 0 then
+          begin
+            Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+            Player[WhatPlayersInGame[PlayerCounter]].Cards[
+              Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+              CombinationCardChoice;
+          end;
+        end
 
-      else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 18) then
-      begin
-        Chance := random(31);
-        if Chance = 0 then
+        else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 18) then
         begin
-          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-          Player[WhatPlayersInGame[PlayerCounter]].Cards[
-            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
-            CombinationCardChoice;
-        end;
-      end
+          Chance := random(31);
+          if Chance = 0 then
+          begin
+            Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+            Player[WhatPlayersInGame[PlayerCounter]].Cards[
+              Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+              CombinationCardChoice;
+          end;
+        end
 
-      else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 19) then
-      begin
-        Chance := random(51);
-        if Chance = 0 then
+        else if (Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard = 19) then
         begin
-          Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
-          Player[WhatPlayersInGame[PlayerCounter]].Cards[
-            Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
-            CombinationCardChoice;
+          Chance := random(51);
+          if Chance = 0 then
+          begin
+            Inc(Player[WhatPlayersInGame[PlayerCounter]].NumberCard);
+            Player[WhatPlayersInGame[PlayerCounter]].Cards[
+              Player[WhatPlayersInGame[PlayerCounter]].NumberCard] :=
+              CombinationCardChoice;
+          end;
         end;
       end;
-
     end;
     //ReloadTable;
   end;
@@ -1181,6 +1184,7 @@ var
     Name: string;
     GoNaxt: boolean;
     CounterPlayer: integer;
+
   begin
     Inc(NumberAccounts);
     Player[NumberAccounts].NamePlayer := '';
@@ -1243,12 +1247,16 @@ var
     Writeln('|------------------------|');
     gotoXY(35, 12);
     Readln(Name);
+
+    if Name = 'Back' then
+      LoginAccount;
+
     for Counter := 1 to NumberAccounts do
     begin
       if Player[Counter].NamePlayer = Name then
       begin
         gotoXY(26, 14);
-        Write('| UPass:                 |');
+        Write('| UPass:                 |'#3);
         gotoXY(26, 15);
         Writeln('|========================|');
         gotoXY(35, 14);
@@ -1268,20 +1276,7 @@ var
           Delay(1000);
           ClearScreen;
           BJLabel;
-          gotoXY(3, 11);
-          Writeln('|====================|');
-          gotoXY(3, 12);
-          Writeln('|   Authorization    |');
-          gotoXY(3, 13);
-          Writeln('|--------------------|');
-          gotoXY(3, 14);
-          Writeln('| 1. Login           |');
-          gotoXY(3, 15);
-          Writeln('| 2. Register        |');
-          gotoXY(3, 16);
-          Write('| Select Mode: 1     |');
-          gotoXY(3, 17);
-          Writeln('|====================|');
+          LoginAccount;
           Login;
         end;
       end;
