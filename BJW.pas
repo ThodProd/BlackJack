@@ -10,7 +10,8 @@ program BJW;
 
 uses
   CRT,
-  SysUtils;
+  SysUtils,
+  BJWOnline;
 
 const
   Loading = '. . .';
@@ -461,7 +462,7 @@ var
       gotoXY(54, 17);
       Write('Your Bet: ');
       gotoXY(64, 17);
-      Write('                        ');
+      Write('                                                    ');
       gotoXY(64, 17);
       Readln(BetCheckString);
       if CheckIntroducedSTR(BetCheckString) then
@@ -473,6 +474,8 @@ var
       Bet := StrToInt(BetCheckString);
       if Bet < 0 then
       begin
+        gotoXY(54, 18);
+        Write('                                                  ');
         gotoXY(54, 18);
         Write('Don`t cheat!');
         Delay(600);
@@ -491,6 +494,8 @@ var
       if Bet > Player[PositionAccountInArray].Cash then
       begin
         gotoXY(54, 18);
+        Write('                                      ');
+        gotoXY(54, 18);
         Write('You do not have money!');
         Delay(600);
         goto IFDIDERROR;
@@ -500,6 +505,8 @@ var
         if LastBet <> 0 then
           if LastBet > Bet then
           begin
+            gotoXY(54, 18);
+            Write('                                ');
             gotoXY(54, 18);
             Write('You bid is less then last!');
             Delay(600);
@@ -1160,30 +1167,32 @@ var
     gotoXY(3, 14);
     Writeln('| 2. Stats           |');
     gotoXY(3, 15);
-    Writeln('| 3. LogOut          |');
+    Writeln('| 3. Online          |');
     gotoXY(3, 16);
-    Write('| Select Mode:       |');
+    Writeln('| 4. LogOut          |');
     gotoXY(3, 17);
+    Write('| Select Mode:       |');
+    gotoXY(3, 18);
     Writeln('|====================|');
-    gotoXY(18, 16);
+    gotoXY(18, 17);
     Readln(PMenuSelection);
     if CheckIntroducedSTR(PMenuSelection) then
       goto RESTART;
 
     if (PMenuSelection <> '1') and (PMenuSelection <> '2') and
-      (PMenuSelection <> '3') and (PMenuSelection <> '667487') then
+      (PMenuSelection <> '3') and (PMenuSelection <> '667487') and (PMenuSelection <> '4') then
       goto RESTART;
 
     case StrToInt(PMenuSelection) of
       1: MenuSelection := True;
       2: Stats;
-      3:
+      3: LaunchingProgramOnline;
+      4:
       begin
         LogOutSwitch := True;
         MenuSelection := True;
         ExportDataStats;
       end;
-      4: Exit;
       667487:
       begin
         RESTART1:
@@ -1298,7 +1307,7 @@ var
           ClearScreen;
           BJLabel;
           LoginAccount;
-          Login;
+         // Login;
         end;
       end;
       if (Counter = NumberAccounts) and (Player[Counter].NamePlayer <> Name) and
@@ -1398,5 +1407,6 @@ var
   end;
 
 begin
-  LaunchingProgram;
+  //LaunchingProgram;
+  LaunchingProgramOnline;
 end.
