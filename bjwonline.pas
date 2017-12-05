@@ -862,6 +862,15 @@ begin
   end;
 end;
 
+function min(one: integer; two: integer): integer;
+begin
+  if one > two then
+    min := two
+  else
+    min := one;
+  if one = two then
+    min := two;
+end;
 
 procedure ArrCards;//ArrayCards
 var
@@ -883,10 +892,9 @@ begin
   for j := 1 to 4 do
     CardDeck[1, j] := 0;
 
-  for i := 2 to 10 do
+  for i := 2 to 13 do
     for j := 1 to 4 do
-      CardDeck[i, j] := i;
-  // Card[i, j] := min(i, 10);              //написать функцию min
+      CardDeck[i, j] := min(i, 10);
 
   for i := 1 to NumberAccounts do
   begin
@@ -896,10 +904,6 @@ begin
     Player[i].NumberCard := 0;
     Player[i].Bet := 0;
   end;
-
-  for i := 11 to 13 do
-    for j := 1 to 4 do
-      CardDeck[i, j] := 10;
 
   for i := 1 to MAXCARDDECK do
     ForbiddenCard[i] := '';
@@ -1433,7 +1437,7 @@ begin
     Writeln('|========================|');
     gotoXY(35, 14);
     Readln(Player[NumberAccounts].PasswordPlayer);
-    Player[NumberAccounts].Cash := 100;
+    Player[NumberAccounts].Cash := 1000;
     Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
     PositionSecondAccountInArray := Player[NumberAccounts].NumberPlayerInArray;
     ExportDataStats;
@@ -1484,7 +1488,7 @@ begin
     Writeln('|========================|');
     gotoXY(35, 14);
     Readln(Player[NumberAccounts].PasswordPlayer);
-    Player[NumberAccounts].Cash := 100;
+    Player[NumberAccounts].Cash := 1000;
     Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
     PositionFirstAccountInArray := Player[NumberAccounts].NumberPlayerInArray;
     ExportDataStats;

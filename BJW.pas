@@ -765,6 +765,16 @@ var
     end;
   end;
 
+  function min(one: integer; two: integer): integer;
+  begin
+    if one > two then
+      min := two
+    else
+      min := one;
+    if one = two then
+      min := two;
+  end;
+
   procedure ArrCards;//ArrayCards
   var
     i, j: integer;
@@ -783,10 +793,9 @@ var
     for j := 1 to 4 do
       CardDeck[1, j] := 0;
 
-    for i := 2 to 10 do
+    for i := 2 to 13 do
       for j := 1 to 4 do
-        CardDeck[i, j] := i;
-    // Card[i, j] := min(i, 10);              //написать функцию min
+        CardDeck[i, j] := min(i, 10);
 
     for i := 1 to NumberAccounts do
     begin
@@ -796,10 +805,6 @@ var
       Player[i].NumberCard := 0;
       Player[i].Bet := 0;
     end;
-
-    for i := 11 to 13 do
-      for j := 1 to 4 do
-        CardDeck[i, j] := 10;
 
     for i := 1 to MAXCARDDECK do
       ForbiddenCard[i] := '';
@@ -1288,8 +1293,8 @@ var
         Readln(Password);
         if Password = Player[Counter].PasswordPlayer then
         begin
-          PositionAccountInArray:=Counter;
-          LoginSelection:=True;
+          PositionAccountInArray := Counter;
+          LoginSelection := True;
           break;
         end
         else
@@ -1302,7 +1307,7 @@ var
           LoginAccount;
         end;
       end
-      else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer)then
+      else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
       begin
         gotoXY(26, 14);
         Write('|      Wrong login!      |');
