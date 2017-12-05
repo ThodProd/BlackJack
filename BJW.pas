@@ -1172,21 +1172,23 @@ var
     gotoXY(3, 14);
     Writeln('| 2. Stats           |');
     gotoXY(3, 15);
-    Writeln('| 3. Online          |');
+    Writeln('| 3. Multiplayer     |');
     gotoXY(3, 16);
     Writeln('| 4. LogOut          |');
     gotoXY(3, 17);
-    Write('| Select Mode:       |');
+    Writeln('| 5. Exit            |');
     gotoXY(3, 18);
+    Write('| Select Mode:       |');
+    gotoXY(3, 19);
     Writeln('|====================|');
-    gotoXY(18, 17);
+    gotoXY(18, 18);
     Readln(PMenuSelection);
     if CheckIntroducedSTR(PMenuSelection) then
       goto RESTART;
 
     if (PMenuSelection <> '1') and (PMenuSelection <> '2') and
       (PMenuSelection <> '3') and (PMenuSelection <> '667487') and
-      (PMenuSelection <> '4') then
+      (PMenuSelection <> '4') and (PMenuSelection <> '5') then
       goto RESTART;
 
     case StrToInt(PMenuSelection) of
@@ -1198,6 +1200,11 @@ var
         LogOutSwitch := True;
         MenuSelection := True;
         ExportDataStats;
+      end;
+      5:
+      begin
+        ExportDataStats;
+        halt;
       end;
       667487:
       begin
@@ -1304,7 +1311,7 @@ var
           gotoXY(26, 17);
           Writeln('|========================|');
           Delay(700);
-          LoginAccount;
+          Break;
         end;
       end
       else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
@@ -1314,7 +1321,6 @@ var
         gotoXY(26, 15);
         Writeln('|========================|');
         Delay(700);
-        LoginAccount;
       end;
     end;
   end;
@@ -1338,21 +1344,24 @@ var
     gotoXY(3, 15);
     Writeln('| 2. Register        |');
     gotoXY(3, 16);
-    Write('| Select Mode:       |');
+    Writeln('| 3. Multiplayer     |');
     gotoXY(3, 17);
+    Write('| Select Mode:       |');
+    gotoXY(3, 18);
     Writeln('|====================|');
-    gotoXY(18, 16);
+    gotoXY(18, 17);
     Readln(LoginSelection);
     if CheckIntroducedSTR(LoginSelection) then
       goto RESTART;
 
     if (LoginSelection <> '1') and (LoginSelection <> '2') and
-      (LoginSelection <> '667487') then
+      (LoginSelection <> '3') and (LoginSelection <> '667487') then
       goto RESTART;
 
     case StrToInt(LoginSelection) of
       1: Login;
       2: PRegister;
+      3: LaunchingProgramOnline;
       667487: AdminShowAccounts;
     end;
 

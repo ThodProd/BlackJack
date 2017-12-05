@@ -38,9 +38,9 @@ procedure LaunchingProgramOnline;
 
 var
   Winner: string[100];
-  MenuSelection, LoginSelection, NewGameSelection, NewGameBoolean,
-  WinSelection, HideSelection, MakeBetSwitch, LogOutSwitch, ExitOnline,
-  AdminSwitch, SwapSwitch: boolean;
+  MenuSelection, LoginSecondSelection, LoginFirstSelection, NewGameSelection,
+  NewGameBoolean, WinSelection, HideSelection, MakeBetSwitch, LogOutSwitch,
+  ExitOnline, AdminSwitch, SwapSwitch: boolean;
   Player: array [1..MAXACCOUNTS] of TPlayer;
   CardDeck: array[1..13, 1..4] of integer;
   WhatPlayersInGame: array[1..MAXBOTS] of word;
@@ -372,7 +372,7 @@ end;
 
 procedure ReloadTableForFirstPlayer;
 var
-  i, j, PositionXY: integer;
+  i, PositionXY: integer;
 begin
   ClearScreen;
   BJLabel;
@@ -464,7 +464,7 @@ end;
 
 procedure ReloadTableForSecondPlayer;
 var
-  i, j, PositionXY: integer;
+  i, PositionXY: integer;
 begin
   ClearScreen;
   BJLabel;
@@ -916,13 +916,12 @@ procedure NewGameForSecond;//22222222222222
 var
   i, CombinationCardChoice: integer;
   AlvaysPlay: boolean;
-  GameSelection, Swap: string;
+  GameSelection: string;
 label
   RESTART1, RESTART2;
 begin
   ClearScreen;
   BJLabel;
-  Swap := '';
   AlvaysPlay := True;
 
   if NewGameBoolean = True then
@@ -1043,6 +1042,11 @@ begin
             Player[PositionFirstAccountInArray].FirstMove := 1;
             Player[PositionSecondAccountInArray].FirstMove := 0;
             NewGameSelection := False;
+            ClearScreen;
+            BJLabel;
+            gotoXY(48, 17);
+            Write('=-Enter your opponent-=');
+            Readln();
             NewGameForFirst;
           end
           else
@@ -1068,13 +1072,12 @@ procedure NewGameForFirst;//111111111111111
 var
   i, CombinationCardChoice: integer;
   AlvaysPlay: boolean;
-  GameSelection, Swap: string;
+  GameSelection: string;
 label
   RESTART1, RESTART2;
 begin
   ClearScreen;
   BJLabel;
-  Swap := '';
   AlvaysPlay := True;
 
 
@@ -1195,6 +1198,11 @@ begin
             Player[PositionFirstAccountInArray].FirstMove := 0;
             Player[PositionSecondAccountInArray].FirstMove := 1;
             NewGameSelection := False;
+            ClearScreen;
+            BJLabel;
+            gotoXY(48, 17);
+            Write('=-Enter your opponent-=');
+            Readln();
             NewGameForSecond;
           end
           else
@@ -1369,16 +1377,19 @@ begin
   gotoXY(3, 15);
   Writeln('| 3. LogOut          |');
   gotoXY(3, 16);
-  Write('| Select Mode:       |');
+  Writeln('| 4. Exit mult.      |');
   gotoXY(3, 17);
+  Write('| Select Mode:       |');
+  gotoXY(3, 18);
   Writeln('|====================|');
-  gotoXY(18, 16);
+  gotoXY(18, 17);
   Readln(PMenuSelection);
   if CheckIntroducedSTR(PMenuSelection) then
     goto RESTART;
 
   if (PMenuSelection <> '1') and (PMenuSelection <> '2') and
-    (PMenuSelection <> '3') then
+    (PMenuSelection <> '3') and (PMenuSelection <> '4') then
+
     goto RESTART;
 
   case StrToInt(PMenuSelection) of
@@ -1390,7 +1401,13 @@ begin
       MenuSelection := True;
       ExportDataStats;
     end;
-    4: Exit;
+    4:
+    begin
+      MenuSelection := True;
+      LogOutSwitch := False;
+      NewGameSelection := True;
+      ExitOnline := False;
+    end;
   end;
 end;
 
@@ -1441,7 +1458,7 @@ begin
     Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
     PositionSecondAccountInArray := Player[NumberAccounts].NumberPlayerInArray;
     ExportDataStats;
-    LoginSelection := True;
+    LoginSecondSelection := True;
   end;
 end;
 
@@ -1492,7 +1509,7 @@ begin
     Player[NumberAccounts].NumberPlayerInArray := NumberAccounts;
     PositionFirstAccountInArray := Player[NumberAccounts].NumberPlayerInArray;
     ExportDataStats;
-    LoginSelection := True;
+    LoginFirstSelection := True;
   end;
 end;
 
@@ -1512,40 +1529,52 @@ begin
   gotoXY(35, 12);
   Readln(Name);
 
-  for Counter := 1 to NumberAccounts do
+  if Name = Player[PositionFirstAccountInArray].NamePlayer then
   begin
-    if Name = Player[Counter].NamePlayer then
+    gotoXY(26, 14);
+    Write('|      Login Error!      |');
+    gotoXY(26, 15);
+    Writeln('|========================|');
+    Delay(700);
+  end
+  else
+  begin
+
+    for Counter := 1 to NumberAccounts do
     begin
-      gotoXY(26, 14);
-      Write('| UPass:                 |');
-      gotoXY(26, 15);
-      Writeln('|========================|');
-      gotoXY(35, 14);
-      Readln(Password);
-      if Password = Player[Counter].PasswordPlayer then
+      if Name = Player[Counter].NamePlayer then
       begin
-        PositionSecondAccountInArray := Counter;
-        LoginSelection := True;
-        break;
+        gotoXY(26, 14);
+        Write('| UPass:                 |');
+        gotoXY(26, 15);
+        Writeln('|========================|');
+        gotoXY(35, 14);
+        Readln(Password);
+        if Password = Player[Counter].PasswordPlayer then
+        begin
+          PositionSecondAccountInArray := Counter;
+          LoginSecondSelection := True;
+          break;
+        end
+        else
+        begin
+          gotoXY(26, 16);
+          Write('|    Wrong password!     |');
+          gotoXY(26, 17);
+          Writeln('|========================|');
+          Delay(700);
+          break;
+        end;
       end
-      else
+      else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
       begin
-        gotoXY(26, 16);
-        Write('|    Wrong password!     |');
-        gotoXY(26, 17);
+        gotoXY(26, 14);
+        Write('|      Wrong login!      |');
+        gotoXY(26, 15);
         Writeln('|========================|');
         Delay(700);
-        LoginAccountForSecondPlayer;
+        break;
       end;
-    end
-    else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
-    begin
-      gotoXY(26, 14);
-      Write('|      Wrong login!      |');
-      gotoXY(26, 15);
-      Writeln('|========================|');
-      Delay(700);
-      LoginAccountForSecondPlayer;
     end;
   end;
 end;
@@ -1579,7 +1608,7 @@ begin
       if Password = Player[Counter].PasswordPlayer then
       begin
         PositionFirstAccountInArray := Counter;
-        LoginSelection := True;
+        LoginFirstSelection := True;
         break;
       end
       else
@@ -1589,7 +1618,7 @@ begin
         gotoXY(26, 17);
         Writeln('|========================|');
         Delay(700);
-        LoginAccountForFirstPlayer;
+        break;
       end;
     end
     else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
@@ -1599,7 +1628,7 @@ begin
       gotoXY(26, 15);
       Writeln('|========================|');
       Delay(700);
-      LoginAccountForFirstPlayer;
+      break;
     end;
   end;
 end;
@@ -1678,8 +1707,7 @@ begin
     MenuSelection := True;
     LogOutSwitch := False;
     NewGameSelection := True;
-    ExitOnline := True;
-    Halt;
+    ExitOnline := False;
   end;
 
   if CheckIntroducedSTR(LoginSelection) then
@@ -1694,46 +1722,89 @@ begin
     2: PRegisterForFirstPlayer;
     667487: AdminShowAccounts;
   end;
-  LoginAccountForSecondPlayer;
 end;
 
 procedure BodyProgram;
 label
   LoginGo, MenuGo;
 begin
-  LoginGo:
-    LoginSelection := False;
-  MenuSelection := False;
-  ExitOnline := False;
-
-  LogOutSwitch := False;
-  while LoginSelection <> True do
+  ExitOnline := True;
+  while ExitOnline = True do
   begin
-    LoginAccountForFirstPlayer;
-    if LoginSelection = True then
-      break;
-  end;
+    LoginGo:
+      LoginSecondSelection := False;
+    LoginFirstSelection := False;
+    MenuSelection := False;
 
-  MenuGo:
-    NewGameSelection := False;
+    LogOutSwitch := False;
 
-  while MenuSelection <> True do
-  begin
-    MenuGame;
-  end;
-  if LogOutSwitch = True then
-    goto LoginGo;
-  ArrCards;
+    while LoginFirstSelection <> True do
+    begin
 
-  while NewGameSelection <> True do
-  begin
-    StartGame;
-    if NewGameSelection = True then
+      if ExitOnline = False then
+        Break;
+
+      LoginAccountForFirstPlayer;
+
+      if LoginFirstSelection = True then
+        break;
+    end;
+
+    if ExitOnline = False then
+      Break;
+
+    while LoginSecondSelection <> True do
+    begin
+
+      if ExitOnline = False then
+        Break;
+
+      LoginAccountForSecondPlayer;
+
+      if LoginSecondSelection = True then
+        break;
+    end;
+
+    if ExitOnline = False then
+      Break;
+
+    MenuGo:
+
+      NewGameSelection := False;
+
+    while MenuSelection <> True do
+    begin
+
+      if ExitOnline = False then
+        Break;
+
+      MenuGame;
+    end;
+
+    if ExitOnline = False then
+      Break;
+
+    if LogOutSwitch = True then
+      goto LoginGo;
+
+    ArrCards;
+
+    while NewGameSelection <> True do
+    begin
+      if ExitOnline = False then
+        Break;
+
+      StartGame;
+
+      if NewGameSelection = True then
+        Break;
+    end;
+
+    ExportDataStats;
+
+    if ExitOnline = False then
       Break;
   end;
-  ExportDataStats;
-  if ExitOnline = False then
-    goto MenuGo;
 end;
 
 procedure LaunchingProgramOnline;
