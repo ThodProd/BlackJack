@@ -1180,7 +1180,8 @@ var
       goto RESTART;
 
     if (PMenuSelection <> '1') and (PMenuSelection <> '2') and
-      (PMenuSelection <> '3') and (PMenuSelection <> '667487') and (PMenuSelection <> '4') then
+      (PMenuSelection <> '3') and (PMenuSelection <> '667487') and
+      (PMenuSelection <> '4') then
       goto RESTART;
 
     case StrToInt(PMenuSelection) of
@@ -1263,11 +1264,9 @@ var
   var
     Password, Name: string;
     Counter: integer;
-    IfLoginExists: boolean;
   begin
     Password := '';
     Name := '';
-    IfLoginExists := True;
     gotoXY(26, 11);
     Writeln('|========================|');
     gotoXY(26, 12);
@@ -1277,12 +1276,9 @@ var
     gotoXY(35, 12);
     Readln(Name);
 
-    if Name = 'Back' then
-      LoginAccount;
-
     for Counter := 1 to NumberAccounts do
     begin
-      if Player[Counter].NamePlayer = Name then
+      if Name = Player[Counter].NamePlayer then
       begin
         gotoXY(26, 14);
         Write('| UPass:                 |');
@@ -1290,11 +1286,11 @@ var
         Writeln('|========================|');
         gotoXY(35, 14);
         Readln(Password);
-        if Player[Counter].PasswordPlayer = Password then
+        if Password = Player[Counter].PasswordPlayer then
         begin
-          PositionAccountInArray := Player[Counter].NumberPlayerInArray;
-          LoginSelection := True;
-          IfLoginExists := False;
+          PositionAccountInArray:=Counter;
+          LoginSelection:=True;
+          break;
         end
         else
         begin
@@ -1302,22 +1298,18 @@ var
           Write('|    Wrong password!     |');
           gotoXY(26, 17);
           Writeln('|========================|');
-          Delay(1000);
-          Password := '';
-          ClearScreen;
-          BJLabel;
+          Delay(700);
           LoginAccount;
-         // Login;
         end;
-      end;
-      if (Counter = NumberAccounts) and (Player[Counter].NamePlayer <> Name) and
-        (IfLoginExists <> False) then
+      end
+      else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer)then
       begin
         gotoXY(26, 14);
         Write('|      Wrong login!      |');
         gotoXY(26, 15);
         Writeln('|========================|');
-        Delay(1000);
+        Delay(700);
+        LoginAccount;
       end;
     end;
   end;
@@ -1407,6 +1399,6 @@ var
   end;
 
 begin
-  //LaunchingProgram;
-  LaunchingProgramOnline;
+  LaunchingProgram;
+  //LaunchingProgramOnline;
 end.

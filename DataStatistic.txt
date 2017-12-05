@@ -1,4 +1,4 @@
-14
+17
 Thodulis
 lol
 186
@@ -41,3 +41,12 @@ Doctor
 toxa
 1234
 100
+b
+b
+90
+Beck
+Beck
+1000
+v
+v
+110

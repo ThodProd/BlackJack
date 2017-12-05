@@ -69,7 +69,7 @@ begin
   gotoxy(13, 2);
   Writeln(' .______    __          ___       ______  __  ___        __       ___       ______  __  ___ MULTIPLAYER ');
   gotoxy(13, 3);
-  Writeln(' |   _  \  |  |        /   \     /      ||  |/  /       |  |     /   \     /      ||  |/  / ');
+  Writeln(' |   _  \  |  |        /   \     /      ||  |/  /       |  |     /   \     /      ||  |/  /       Betta');
   gotoxy(13, 4);
   Writeln(' |  |_)  | |  |       /  ^  \   |  ,----.|  .  /        |  |    /  ^  \   |  ,----.|  .  /  ');
   gotoxy(13, 5);
@@ -85,45 +85,62 @@ end;
 
 procedure Whore;
 begin
+  ClrScr;
   TextBackground(Black);
+  ClrScr;
   TextColor(TEXTCOLORS);
-  Writeln('___________________________¶¶¶¶¶¶¶¶');
-  Writeln('_______¶¶¶¶¶¶¶¶¶_________¶¶¶¶¶¶¶¶¶¶¶');
-  Writeln('______¶¶_______¶¶¶______¶¶¶¶¶¶¶¶¶¶¶¶¶');
-  Writeln('_____¶¶______¶¶_¶¶______¶¶¶¶¶¶¶¶¶¶¶¶¶');
-  Writeln('_____¶_____¶¶¶¶¶¶¶______¶¶_¶¶¶¶¶¶¶¶¶¶');
-  Writeln('_____¶____¶¶¶____¶______¶___¶¶¶¶¶¶¶¶¶');
-  Writeln('_____¶¶___¶¶¶__¶¶¶¶____¶¶____¶¶¶¶¶¶¶');
-  Writeln('_____¶¶___¶¶¶¶_¶¶¶______¶¶¶_¶¶¶¶¶¶¶');
-  Writeln('____¶¶¶¶___¶_¶¶¶¶________¶¶¶¶¶____¶¶¶');
-  Writeln('____¶¶¶¶¶__¶¶¶¶¶¶____________¶¶¶___¶¶¶');
-  Writeln('___¶¶¶¶¶¶¶¶_¶_¶¶¶¶___________¶¶______¶¶');
-  Writeln('__¶¶______¶_¶¶¶¶_¶__________¶¶_______¶¶¶');
-  Writeln('__¶_______¶¶¶¶¶¶¶¶¶_________¶_________¶¶');
-  Writeln('__¶_____¶¶__¶¶¶_¶¶¶________¶¶__________¶');
-  Writeln('__¶______¶¶__¶¶_¶¶¶¶______¶¶___________¶');
-  Writeln('__¶¶¶¶____¶¶__¶¶_¶¶¶¶___¶¶¶____¶¶¶____¶¶');
-  Writeln('___¶_¶¶____¶¶¶¶¶_¶¶_¶__¶¶______¶______¶¶');
-  Writeln('___¶__¶¶___¶¶¶¶¶¶¶__¶¶¶¶_____¶¶______¶¶');
-  Writeln('___¶___¶¶____¶¶_¶¶¶__¶¶_____¶¶______¶¶');
-  Writeln('___¶____¶¶¶___¶¶¶¶¶¶¶¶____¶¶¶_______¶');
-  Writeln('___¶______¶¶¶¶¶¶¶¶¶¶___¶¶¶¶________¶¶');
-  Writeln('___¶________¶¶____¶¶__¶¶¶¶_________¶');
-  Writeln('__¶¶_____¶¶¶_______¶¶¶¶¶¶¶________¶¶');
-  Writeln('__¶¶___¶¶¶__________¶¶¶¶¶¶________¶¶¶');
-  Writeln('_¶¶__¶¶¶_______¶_____¶¶¶¶_________¶¶¶¶');
-  Writeln('¶¶_¶¶¶________¶¶¶_____¶¶___________¶_¶¶');
-  Writeln('¶¶____________¶_¶______¶___________¶¶_¶¶');
-  Writeln('¶¶___________¶¶¶¶¶¶____¶¶__________¶¶__¶¶¶¶');
-  Writeln('_¶¶_________¶¶¶¶¶¶¶¶____¶¶_______¶¶¶¶¶¶¶¶_¶¶¶¶¶¶¶¶');
-  Writeln('_¶¶¶______¶¶¶¶_____¶¶____¶¶¶¶¶¶¶¶¶¶¶¶__¶__¶¶¶¶¶¶¶¶');
-  Writeln('___¶¶¶¶¶¶¶¶___¶¶¶¶¶¶¶¶¶___¶¶¶_____¶¶¶¶_¶¶¶¶¶¶¶¶');
-  Writeln('_____¶¶¶¶¶__¶¶¶_______¶¶¶___¶¶¶¶¶___¶¶¶¶¶¶¶');
-  Writeln('________¶¶______________¶____¶¶_¶¶¶____¶¶¶¶¶');
-  Writeln('_________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶____¶¶¶¶¶¶¶¶¶¶¶¶¶');
-  Writeln('__________________________¶¶_____¶¶¶¶');
-  Writeln('__________________________¶¶¶¶______¶¶¶¶');
-  Writeln('_____________________________¶¶¶¶¶¶¶¶¶¶¶');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶');
+  Writeln('________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶');
+  Writeln('_______¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ');
+  Writeln('_____¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ');
+  Writeln('____¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶ ');
+  Writeln('___¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__________¶¶¶¶¶¶¶¶¶¶ ');
+  Writeln('___¶¶¶¶¶¶¶¶¶¶¶¶¶¶________________¶¶¶¶¶¶¶');
+  Writeln('___¶¶¶¶¶¶¶¶¶¶¶¶¶____¶¶¶¶¶_______¶¶¶¶¶¶¶¶');
+  Writeln('__¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶___¶¶¶¶¶___¶¶¶¶¶¶¶¶ ');
+  Writeln('__¶¶¶¶¶¶¶¶¶¶¶¶¶_¶¶_________¶¶¶¶¶¶¶  ');
+  Writeln('__¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_______¶___¶¶¶¶¶ ');
+  Writeln('__¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_____¶¶¶_¶¶¶¶¶ ');
+  Writeln('__¶¶¶¶¶¶¶¶¶¶¶¶_____¶¶¶¶¶¶¶_¶¶¶¶ ');
+  Writeln('__¶¶¶¶¶¶¶¶¶¶¶¶_______¶¶¶¶¶¶¶¶¶ ');
+  Writeln('_¶¶¶¶¶¶¶_¶¶¶___________¶¶¶¶¶ ');
+  Writeln('¶¶¶¶¶¶¶_¶_______________¶¶¶ ');
+  Writeln('¶¶¶¶¶¶___________________¶¶  ');
+  Writeln('_¶¶¶_____________________¶_¶  ');
+  Writeln('_¶¶¶_____________________¶¶   ');
+  Writeln('___¶¶__________¶___________¶¶¶  ');
+  Writeln('____¶¶_________¶¶__________¶¶¶¶¶¶¶  ');
+  Writeln('_____¶__________¶¶_________¶¶¶___¶¶¶  ');
+  Writeln('_____¶¶__________¶__________¶¶______¶¶ ');
+  Writeln('______¶___________¶__________¶_____¶¶¶¶ ');
+  Writeln('_______¶___________¶_________¶¶______¶  ');
+  Writeln('_______¶¶__________¶¶________¶¶¶____¶¶ ');
+  Writeln('________¶¶__________¶¶________¶¶¶¶¶¶  ');
+  Writeln('_________¶¶¶¶________¶__________¶¶¶¶¶  ');
+  Writeln('__________¶¶¶¶¶¶¶¶¶¶¶¶¶__________¶¶¶¶¶ ');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶___________¶¶¶ ');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶___________¶¶¶ ');
+  Writeln('_____________¶¶¶¶¶¶¶¶¶¶¶¶__________¶¶¶¶  ');
+  Writeln('_____________¶¶¶¶¶¶¶¶¶¶¶¶¶_________¶¶¶¶  ');
+  Writeln('_____________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶  ');
+  Writeln('____________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_¶¶  ');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶________¶ ');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶______¶¶  ');
+  Writeln('__________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶______¶  ');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_____¶¶ ');
+  Writeln('_________¶¶___¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶____¶¶  ');
+  Writeln('________¶¶_______¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶_____¶¶ ');
+  Writeln('_______¶_________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶____¶¶ ');
+  Writeln('_____¶¶_____________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶____¶¶¶ ');
+  Writeln('____¶¶_________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶___¶¶ ');
+  Writeln('____¶____________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶__¶¶ ');
+  Writeln('____¶________________________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶____¶ ');
+  Writeln('_____¶_________________________¶_____¶¶¶_¶¶__¶___¶ ');
+  Writeln('_____¶¶_______________________¶__________¶¶¶¶¶¶¶ ');
+  Writeln('_______¶______________________¶  ');
+  Writeln('________¶¶_____________________¶ ');
+  Writeln('_________¶¶_____________________¶¶ ');
+  Writeln('___________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶  ');
 end;
 
 procedure LoadingLaod;
@@ -712,100 +729,122 @@ begin
     Max := 0;
     SumValueCards;
     HideSelection := False;
-
-    for CounterPlayer := 1 to MAXPLAYERS do
-      PlayerWins[CounterPlayer] := 0;
-
-    for CounterPlayer := 1 to MAXPLAYERS do
-      for i := 1 to 2 do
-        PlayerNotLose[CounterPlayer, i] := 0;
-
-
-    if Player[PositionFirstAccountInArray].SumValuesCard <= 21 then
+    if Player[PositionSecondAccountInArray].SumValuesCard =
+      Player[PositionFirstAccountInArray].SumValuesCard then
     begin
-      Inc(j);
-      PlayerNotLose[j, 1] := Player[PositionFirstAccountInArray].SumValuesCard;
-      PlayerNotLose[j, 2] := Player[PositionFirstAccountInArray].NumberPlayerInArray;
-    end;
-
-    if Player[PositionSecondAccountInArray].SumValuesCard <= 21 then
-    begin
-      Inc(j);
-      PlayerNotLose[j, 1] := Player[PositionSecondAccountInArray].SumValuesCard;
-      PlayerNotLose[j, 2] := Player[PositionSecondAccountInArray].NumberPlayerInArray;
-    end;
-
-
-    Max := PlayerNotLose[1, 1];
-
-    for i := 1 to j do
-    begin
-      if Max < PlayerNotLose[i, 1] then
-        Max := PlayerNotLose[i, 1];
-    end;
-
-    for i := 1 to j do
-    begin
-      if Max = PlayerNotLose[i, 1] then
+      Winner := Player[PositionSecondAccountInArray].NamePlayer +
+        '! ' + Player[PositionFirstAccountInArray].NamePlayer + '! ';
+      PlayerWins[1] := Player[PositionSecondAccountInArray].NumberPlayerInArray;
+      PlayerWins[2] := Player[PositionFirstAccountInArray].NumberPlayerInArray;
+      for CounterPlayer := 1 to NumberSimbolsInString(Winner, '!') do
       begin
-        WinPosition := PlayerNotLose[i, 2];
+        Player[PlayerWins[CounterPlayer]].Cash +=
+          Trunc(Bank / NumberSimbolsInString(Winner, '!'));
       end;
-    end;
-
-    if WinPosition <> 0 then
+      WinSelection := True;
+      HideSelection := False;
+      ExportDataStats;
+      if Player[PositionFirstAccountInArray].FirstMove = 1 then
+        ReloadTableForFirstPlayer;
+      if Player[PositionSecondAccountInArray].FirstMove = 1 then
+        ReloadTableForSecondPlayer;
+    end
+    else
     begin
-      Winner := Player[WinPosition].NamePlayer + '!';
+      for CounterPlayer := 1 to MAXPLAYERS do
+        PlayerWins[CounterPlayer] := 0;
 
-      PlayerWins[NumberSimbolsInString(Winner, '!')] :=
-        Player[WinPosition].NumberPlayerInArray;
-    end;
-
-    Player[PositionFirstAccountInArray].Cash :=
-      Player[PositionFirstAccountInArray].Cash - Player[PositionFirstAccountInArray].Bet;
-
-    Player[PositionSecondAccountInArray].Cash :=
-      Player[PositionSecondAccountInArray].Cash -
-      Player[PositionSecondAccountInArray].Bet;
+      for CounterPlayer := 1 to MAXPLAYERS do
+        for i := 1 to 2 do
+          PlayerNotLose[CounterPlayer, i] := 0;
 
 
-    if WinPosition <> 0 then
-    begin
-      for CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
+      if Player[PositionFirstAccountInArray].SumValuesCard <= 21 then
       begin
-        if Player[WinPosition].NumberPlayerInArray <>
-          PlayerNotLose[CounterPlayer, 2] then
-          if Player[WinPosition].SumValuesCard =
-            PlayerNotLose[CounterPlayer, 1] then
+        Inc(j);
+        PlayerNotLose[j, 1] := Player[PositionFirstAccountInArray].SumValuesCard;
+        PlayerNotLose[j, 2] := Player[PositionFirstAccountInArray].NumberPlayerInArray;
+      end;
+
+      if Player[PositionSecondAccountInArray].SumValuesCard <= 21 then
+      begin
+        Inc(j);
+        PlayerNotLose[j, 1] := Player[PositionSecondAccountInArray].SumValuesCard;
+        PlayerNotLose[j, 2] := Player[PositionSecondAccountInArray].NumberPlayerInArray;
+      end;
+
+
+      Max := PlayerNotLose[1, 1];
+
+      for i := 1 to j do
+      begin
+        if Max < PlayerNotLose[i, 1] then
+          Max := PlayerNotLose[i, 1];
+      end;
+
+      for i := 1 to j do
+      begin
+        if Max = PlayerNotLose[i, 1] then
+        begin
+          WinPosition := PlayerNotLose[i, 2];
+        end;
+      end;
+
+      if WinPosition <> 0 then
+      begin
+        Winner := Player[WinPosition].NamePlayer + '!';
+
+        PlayerWins[NumberSimbolsInString(Winner, '!')] :=
+          Player[WinPosition].NumberPlayerInArray;
+      end;
+
+      Player[PositionFirstAccountInArray].Cash :=
+        Player[PositionFirstAccountInArray].Cash -
+        Player[PositionFirstAccountInArray].Bet;
+
+      Player[PositionSecondAccountInArray].Cash :=
+        Player[PositionSecondAccountInArray].Cash -
+        Player[PositionSecondAccountInArray].Bet;
+
+
+      if WinPosition <> 0 then
+      begin
+        for CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
+        begin
+          if Player[WinPosition].NumberPlayerInArray <>
+            PlayerNotLose[CounterPlayer, 2] then
+            if Player[WinPosition].SumValuesCard =
+              PlayerNotLose[CounterPlayer, 1] then
+            begin
+              Winner += ' ' + Player[PlayerNotLose[CounterPlayer, 2]].NamePlayer + '!';
+              PlayerWins[NumberSimbolsInString(Winner, '!')] :=
+                PlayerNotLose[CounterPlayer, 2];
+            end;
+        end;
+
+
+        if Winner <> '' then
+          for CounterPlayer := 1 to NumberSimbolsInString(Winner, '!') do
           begin
-            Winner += ' ' + Player[PlayerNotLose[CounterPlayer, 2]].NamePlayer + '!';
-            PlayerWins[NumberSimbolsInString(Winner, '!')] :=
-              PlayerNotLose[CounterPlayer, 2];
+            Player[PlayerWins[CounterPlayer]].Cash +=
+              Trunc(Bank / NumberSimbolsInString(Winner, '!'));
           end;
       end;
 
+      if Winner = '' then
+      begin
+        Winner := 'None';
+        Bank := 0;
+      end;
 
-      if Winner <> '' then
-        for CounterPlayer := 1 to NumberSimbolsInString(Winner, '!') do
-        begin
-          Player[PlayerWins[CounterPlayer]].Cash +=
-            Trunc(Bank / NumberSimbolsInString(Winner, '!'));
-        end;
+      WinSelection := True;
+      HideSelection := False;
+      ExportDataStats;
+      if Player[PositionFirstAccountInArray].FirstMove = 1 then
+        ReloadTableForFirstPlayer;
+      if Player[PositionSecondAccountInArray].FirstMove = 1 then
+        ReloadTableForSecondPlayer;
     end;
-
-    if Winner = '' then
-    begin
-      Winner := 'None';
-      Bank := 0;
-    end;
-
-    WinSelection := True;
-    HideSelection := False;
-    ExportDataStats;
-    if Player[PositionFirstAccountInArray].FirstMove = 1 then
-      ReloadTableForFirstPlayer;
-    if Player[PositionSecondAccountInArray].FirstMove = 1 then
-      ReloadTableForSecondPlayer;
-
   except
     if Winner = '' then
     begin
@@ -936,9 +975,9 @@ begin
         begin
           ExportDataStats;
           MenuSelection := False;
-          NewGameSelection := True;
           AlvaysPlay := False;
-          MenuGame;
+          NewGameSelection := True;
+          Break;
         end;
       end;
     end
@@ -1089,9 +1128,9 @@ begin
         begin
           ExportDataStats;
           MenuSelection := False;
-          NewGameSelection := True;
           AlvaysPlay := False;
-          MenuGame;
+          NewGameSelection := True;
+          Break;
         end;
       end;
     end
@@ -1250,6 +1289,7 @@ begin
   Writeln('|==================================|');
   readln();
   Readln(Stop);
+  MenuGame;
 end;
 
 procedure AdminShowAccounts;
@@ -1456,11 +1496,9 @@ procedure LoginForSecondPlayer;//22222222222
 var
   Password, Name: string;
   Counter: integer;
-  IfLoginExists: boolean;
 begin
   Password := '';
   Name := '';
-  IfLoginExists := True;
   gotoXY(26, 11);
   Writeln('|========================|');
   gotoXY(26, 12);
@@ -1470,12 +1508,9 @@ begin
   gotoXY(35, 12);
   Readln(Name);
 
-  if Name = 'Back' then
-    LoginAccountForSecondPlayer;
-
   for Counter := 1 to NumberAccounts do
   begin
-    if Player[Counter].NamePlayer = Name then
+    if Name = Player[Counter].NamePlayer then
     begin
       gotoXY(26, 14);
       Write('| UPass:                 |');
@@ -1483,11 +1518,11 @@ begin
       Writeln('|========================|');
       gotoXY(35, 14);
       Readln(Password);
-      if Player[Counter].PasswordPlayer = Password then
+      if Password = Player[Counter].PasswordPlayer then
       begin
-        PositionSecondAccountInArray := Player[Counter].NumberPlayerInArray;
+        PositionSecondAccountInArray := Counter;
         LoginSelection := True;
-        IfLoginExists := False;
+        break;
       end
       else
       begin
@@ -1495,22 +1530,17 @@ begin
         Write('|    Wrong password!     |');
         gotoXY(26, 17);
         Writeln('|========================|');
-        Delay(1000);
-        Password := '';
-        ClearScreen;
-        BJLabel;
+        Delay(700);
         LoginAccountForSecondPlayer;
-        // LoginForSecondPlayer;
       end;
-    end;
-    if (Counter = NumberAccounts) and (Player[Counter].NamePlayer <> Name) and
-      (IfLoginExists <> False) then
+    end
+    else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
     begin
       gotoXY(26, 14);
       Write('|      Wrong login!      |');
       gotoXY(26, 15);
       Writeln('|========================|');
-      Delay(1000);
+      Delay(700);
       LoginAccountForSecondPlayer;
     end;
   end;
@@ -1520,11 +1550,9 @@ procedure LoginForFirstPlayer;//1111111111
 var
   Password, Name: string;
   Counter: integer;
-  IfLoginExists: boolean;
 begin
   Password := '';
   Name := '';
-  IfLoginExists := True;
   gotoXY(26, 11);
   Writeln('|========================|');
   gotoXY(26, 12);
@@ -1534,12 +1562,9 @@ begin
   gotoXY(35, 12);
   Readln(Name);
 
-  if Name = 'Back' then
-    LoginAccountForFirstPlayer;
-
   for Counter := 1 to NumberAccounts do
   begin
-    if Player[Counter].NamePlayer = Name then
+    if Name = Player[Counter].NamePlayer then
     begin
       gotoXY(26, 14);
       Write('| UPass:                 |');
@@ -1547,11 +1572,11 @@ begin
       Writeln('|========================|');
       gotoXY(35, 14);
       Readln(Password);
-      if Player[Counter].PasswordPlayer = Password then
+      if Password = Player[Counter].PasswordPlayer then
       begin
-        PositionFirstAccountInArray := Player[Counter].NumberPlayerInArray;
+        PositionFirstAccountInArray := Counter;
         LoginSelection := True;
-        IfLoginExists := False;
+        break;
       end
       else
       begin
@@ -1559,22 +1584,17 @@ begin
         Write('|    Wrong password!     |');
         gotoXY(26, 17);
         Writeln('|========================|');
-        Delay(1000);
-        Password := '';
-        ClearScreen;
-        BJLabel;
+        Delay(700);
         LoginAccountForFirstPlayer;
-        // LoginForFirstPlayer;
       end;
-    end;
-    if (Counter = NumberAccounts) and (Player[Counter].NamePlayer <> Name) and
-      (IfLoginExists <> False) then
+    end
+    else if (Counter = NumberAccounts) and (Name <> Player[Counter].NamePlayer) then
     begin
       gotoXY(26, 14);
       Write('|      Wrong login!      |');
       gotoXY(26, 15);
       Writeln('|========================|');
-      Delay(1000);
+      Delay(700);
       LoginAccountForFirstPlayer;
     end;
   end;
@@ -1704,6 +1724,8 @@ begin
   while NewGameSelection <> True do
   begin
     StartGame;
+    if NewGameSelection = True then
+      Break;
   end;
   ExportDataStats;
   if ExitOnline = False then
