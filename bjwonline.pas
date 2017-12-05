@@ -56,6 +56,7 @@ procedure LoginAccountForFirstPlayer; forward;
 procedure LoginAccountForSecondPlayer; forward;
 procedure MenuGame; forward;
 procedure StartGame; forward;
+procedure NewGameForFirst; forward;
 
 procedure BJLabel;
 begin
@@ -66,7 +67,7 @@ begin
   Writeln(
     '========================================================================================================================');
   gotoxy(13, 2);
-  Writeln(' .______    __          ___       ______  __  ___        __       ___       ______  __  ___ ONLINE ');
+  Writeln(' .______    __          ___       ______  __  ___        __       ___       ______  __  ___ MULTIPLAYER ');
   gotoxy(13, 3);
   Writeln(' |   _  \  |  |        /   \     /      ||  |/  /       |  |     /   \     /      ||  |/  / ');
   gotoxy(13, 4);
@@ -267,6 +268,49 @@ begin
   AddForbiddenCard(Comb);
   CombinationCard := CardDeck[i, j];
 
+end;
+
+procedure GiveCardsAtBeginningGame;
+var
+  Counter, CombinationCardChoice: integer;
+begin
+  for Counter := 1 to 2 do
+  begin
+    CombinationCardChoice := CombinationCard;
+    if CombinationCardChoice = 0 then
+      if ((Player[PositionFirstAccountInArray].SumValuesCard + 11) > 21) then
+        CombinationCardChoice := 1
+      else
+        CombinationCardChoice := 11;
+
+    Inc(Player[PositionFirstAccountInArray].NumberCard);
+
+    Player[PositionFirstAccountInArray].Cards[
+      Player[PositionFirstAccountInArray].NumberCard] :=
+      CombinationCardChoice;
+    Player[PositionFirstAccountInArray].SumValuesCard :=
+      Player[PositionFirstAccountInArray].SumValuesCard +
+      Player[PositionFirstAccountInArray].Cards[
+      Player[PositionFirstAccountInArray].NumberCard];
+
+    CombinationCardChoice := CombinationCard;
+    if CombinationCardChoice = 0 then
+      if ((Player[PositionSecondAccountInArray].SumValuesCard + 11) > 21) then
+        CombinationCardChoice := 1
+      else
+        CombinationCardChoice := 11;
+
+    Inc(Player[PositionSecondAccountInArray].NumberCard);
+
+    Player[PositionSecondAccountInArray].Cards[
+      Player[PositionSecondAccountInArray].NumberCard] :=
+      CombinationCardChoice;
+    Player[PositionSecondAccountInArray].SumValuesCard :=
+      Player[PositionSecondAccountInArray].SumValuesCard +
+      Player[PositionSecondAccountInArray].Cards[
+      Player[PositionSecondAccountInArray].NumberCard];
+  end;
+  RecountDeck;
 end;
 
 procedure LoadDataStats;//Load GameStats
@@ -825,7 +869,7 @@ end;
 
 
 
-procedure NewGame;//Start new game
+procedure NewGameForSecond;//22222222222222
 var
   i, CombinationCardChoice: integer;
   AlvaysPlay: boolean;
@@ -840,70 +884,23 @@ begin
 
   if NewGameBoolean = True then
   begin
-    for i := 1 to 2 do
-    begin
-      CombinationCardChoice := CombinationCard;
-      if CombinationCardChoice = 0 then
-        if ((Player[PositionFirstAccountInArray].SumValuesCard + 11) > 21) then
-          CombinationCardChoice := 1
-        else
-          CombinationCardChoice := 11;
-
-      Inc(Player[PositionFirstAccountInArray].NumberCard);
-
-      Player[PositionFirstAccountInArray].Cards[
-        Player[PositionFirstAccountInArray].NumberCard] :=
-        CombinationCardChoice;
-      Player[PositionFirstAccountInArray].SumValuesCard :=
-        Player[PositionFirstAccountInArray].SumValuesCard +
-        Player[PositionFirstAccountInArray].Cards[
-        Player[PositionFirstAccountInArray].NumberCard];
-
-      CombinationCardChoice := CombinationCard;
-      if CombinationCardChoice = 0 then
-        if ((Player[PositionSecondAccountInArray].SumValuesCard + 11) > 21) then
-          CombinationCardChoice := 1
-        else
-          CombinationCardChoice := 11;
-
-      Inc(Player[PositionSecondAccountInArray].NumberCard);
-
-      Player[PositionSecondAccountInArray].Cards[
-        Player[PositionSecondAccountInArray].NumberCard] :=
-        CombinationCardChoice;
-      Player[PositionSecondAccountInArray].SumValuesCard :=
-        Player[PositionSecondAccountInArray].SumValuesCard +
-        Player[PositionSecondAccountInArray].Cards[
-        Player[PositionSecondAccountInArray].NumberCard];
-    end;
-
-
     for i := 1 to length(Loading) do
     begin
       Delay(500);
       GotoXY(20, 55 + i);
       Write(Loading[i]);
     end;
-
+    ReloadTableForSecondPlayer;
+    GiveCardsAtBeginningGame;
     RecountDeck;
-
-    if Player[PositionFirstAccountInArray].FirstMove = 1 then
-    begin
-      ReloadTableForFirstPlayer;
-      MakeBetForFirstPlayer;
-      ReloadTableForFirstPlayer;
-    end;
-    if Player[PositionSecondAccountInArray].FirstMove = 1 then
-    begin
-      ReloadTableForSecondPlayer;
-      MakeBetForSecondPlayer;
-      ReloadTableForSecondPlayer;
-    end;
-
+    ReloadTableForSecondPlayer;
   end;
 
   NewGameBoolean := False;
+  ReloadTableForSecondPlayer;
 
+  if Player[PositionSecondAccountInArray].Bet = 0 then
+    MakeBetForSecondPlayer;
 
   while AlvaysPlay = True do
   begin
@@ -932,6 +929,7 @@ begin
         1:
         begin
           AlvaysPlay := False;
+          ExportDataStats;
           StartGame;
         end;
         2:
@@ -940,6 +938,7 @@ begin
           MenuSelection := False;
           NewGameSelection := True;
           AlvaysPlay := False;
+          MenuGame;
         end;
       end;
     end
@@ -954,14 +953,12 @@ begin
       gotoXY(3, 27);
       writeln('3. MakeBet');
       gotoXY(3, 28);
-      writeln('4. Show resilt');
-      gotoXY(3, 29);
       writeln('5. EXIT TO Menu');
-      gotoXY(3, 30);
+      gotoXY(3, 29);
       Write('Select: ');
-      gotoXY(12, 30);
+      gotoXY(12, 29);
       Write('                                            ');
-      gotoXY(12, 30);
+      gotoXY(12, 29);
       readln(GameSelection);
 
       if CheckIntroducedSTR(GameSelection) then
@@ -971,83 +968,200 @@ begin
         (GameSelection <> '3') and (GameSelection <> '4') then
         goto RESTART2;
 
-      if Player[PositionFirstAccountInArray].FirstMove = 1 then
-        ReloadTableForFirstPlayer;
-
-      if Player[PositionSecondAccountInArray].FirstMove = 1 then
-        ReloadTableForSecondPlayer;
+      ReloadTableForSecondPlayer;
 
 
       case StrToInt(GameSelection) of
         1:
         begin
-          if Player[PositionFirstAccountInArray].FirstMove = 1 then
-          begin
-            ReloadTableForFirstPlayer;
-            CombinationCardChoice := CombinationCard;
-            if CombinationCardChoice = 0 then
-              if ((Player[PositionFirstAccountInArray].SumValuesCard + 11) > 21) then
-                CombinationCardChoice := 1
-              else
-                CombinationCardChoice := 11;
+          CombinationCardChoice := CombinationCard;
+          if CombinationCardChoice = 0 then
+            if ((Player[PositionSecondAccountInArray].SumValuesCard + 11) > 21) then
+              CombinationCardChoice := 1
+            else
+              CombinationCardChoice := 11;
 
-            Inc(Player[PositionFirstAccountInArray].NumberCard);
+          Inc(Player[PositionSecondAccountInArray].NumberCard);
 
-            Player[PositionFirstAccountInArray].Cards[
-              Player[PositionFirstAccountInArray].NumberCard] :=
-              CombinationCardChoice;
-            Player[PositionFirstAccountInArray].SumValuesCard :=
-              Player[PositionFirstAccountInArray].SumValuesCard +
-              Player[PositionFirstAccountInArray].Cards[
-              Player[PositionFirstAccountInArray].NumberCard];
-            OpponentsBetting;
-            ReloadTableForFirstPlayer;
-          end;
-          if Player[PositionSecondAccountInArray].FirstMove = 1 then
-          begin
-            ReloadTableForSecondPlayer;
-            CombinationCardChoice := CombinationCard;
-            if CombinationCardChoice = 0 then
-              if ((Player[PositionSecondAccountInArray].SumValuesCard + 11) > 21) then
-                CombinationCardChoice := 1
-              else
-                CombinationCardChoice := 11;
-
-            Inc(Player[PositionSecondAccountInArray].NumberCard);
-
+          Player[PositionSecondAccountInArray].Cards[
+            Player[PositionSecondAccountInArray].NumberCard] :=
+            CombinationCardChoice;
+          Player[PositionSecondAccountInArray].SumValuesCard :=
+            Player[PositionSecondAccountInArray].SumValuesCard +
             Player[PositionSecondAccountInArray].Cards[
-              Player[PositionSecondAccountInArray].NumberCard] :=
-              CombinationCardChoice;
-            Player[PositionSecondAccountInArray].SumValuesCard :=
-              Player[PositionSecondAccountInArray].SumValuesCard +
-              Player[PositionSecondAccountInArray].Cards[
-              Player[PositionSecondAccountInArray].NumberCard];
-            OpponentsBetting;
-            ReloadTableForSecondPlayer;
-          end;
+            Player[PositionSecondAccountInArray].NumberCard];
+          OpponentsBetting;
+          ReloadTableForSecondPlayer;
         end;
         2:
         begin
-          if Player[PositionFirstAccountInArray].FirstMove = 1 then
-          begin
-            Player[PositionFirstAccountInArray].FirstMove := 0;
-            Player[PositionSecondAccountInArray].FirstMove := 1;
-          end;
-          if Player[PositionSecondAccountInArray].FirstMove = 1 then
+          if NewGameSelection = True then
           begin
             Player[PositionFirstAccountInArray].FirstMove := 1;
             Player[PositionSecondAccountInArray].FirstMove := 0;
-          end;
+            NewGameSelection := False;
+            NewGameForFirst;
+          end
+          else
+            Win;
         end;
         3:
         begin
-          if Player[PositionFirstAccountInArray].FirstMove = 1 then
-            MakeBetForFirstPlayer;
-          if Player[PositionSecondAccountInArray].FirstMove = 1 then
-            MakeBetForSecondPlayer;
+          MakeBetForSecondPlayer;
         end;
-        4: Win;
-        5:
+        4:
+        begin
+          ExportDataStats;
+          MenuSelection := False;
+          NewGameSelection := True;
+          AlvaysPlay := False;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure NewGameForFirst;//111111111111111
+var
+  i, CombinationCardChoice: integer;
+  AlvaysPlay: boolean;
+  GameSelection, Swap: string;
+label
+  RESTART1, RESTART2;
+begin
+  ClearScreen;
+  BJLabel;
+  Swap := '';
+  AlvaysPlay := True;
+
+
+  if NewGameBoolean = True then
+  begin
+    for i := 1 to length(Loading) do
+    begin
+      Delay(500);
+      GotoXY(20, 55 + i);
+      Write(Loading[i]);
+    end;
+    ReloadTableForFirstPlayer;
+    GiveCardsAtBeginningGame;
+    RecountDeck;
+    ReloadTableForFirstPlayer;
+  end;
+  NewGameBoolean := False;
+  ReloadTableForFirstPlayer;
+
+  if Player[PositionFirstAccountInArray].Bet = 0 then
+    MakeBetForFirstPlayer;
+  ReloadTableForFirstPlayer;
+
+  while AlvaysPlay = True do
+  begin
+
+    if WinSelection = True then
+    begin
+      RESTART1:
+        gotoXY(3, 25);
+      writeln('1. NEW GAME');
+      gotoXY(3, 26);
+      writeln('2. EXIT TO Menu');
+      gotoXY(11, 28);
+      Write('                   ');
+      gotoXY(3, 28);
+      Write('Select: ');
+      gotoXY(12, 28);
+      readln(GameSelection);
+
+      if CheckIntroducedSTR(GameSelection) then
+        goto RESTART1;
+
+      if (GameSelection <> '1') and (GameSelection <> '2') then
+        goto RESTART1;
+
+      case StrToInt(GameSelection) of
+        1:
+        begin
+          AlvaysPlay := False;
+          ExportDataStats;
+          StartGame;
+        end;
+        2:
+        begin
+          ExportDataStats;
+          MenuSelection := False;
+          NewGameSelection := True;
+          AlvaysPlay := False;
+          MenuGame;
+        end;
+      end;
+    end
+    else
+    begin
+      RESTART2:
+        GameSelection := '';
+      gotoXY(3, 25);
+      writeln('1. Tack');
+      gotoXY(3, 26);
+      writeln('2. Pas');
+      gotoXY(3, 27);
+      writeln('3. MakeBet');
+      gotoXY(3, 28);
+      writeln('5. EXIT TO Menu');
+      gotoXY(3, 29);
+      Write('Select: ');
+      gotoXY(12, 29);
+      Write('                                            ');
+      gotoXY(12, 29);
+      readln(GameSelection);
+
+      if CheckIntroducedSTR(GameSelection) then
+        goto RESTART2;
+
+      if (GameSelection <> '1') and (GameSelection <> '2') and
+        (GameSelection <> '3') and (GameSelection <> '4') then
+        goto RESTART2;
+
+      ReloadTableForFirstPlayer;
+
+      case StrToInt(GameSelection) of
+        1:
+        begin
+          CombinationCardChoice := CombinationCard;
+          if CombinationCardChoice = 0 then
+            if ((Player[PositionFirstAccountInArray].SumValuesCard + 11) > 21) then
+              CombinationCardChoice := 1
+            else
+              CombinationCardChoice := 11;
+
+          Inc(Player[PositionFirstAccountInArray].NumberCard);
+
+          Player[PositionFirstAccountInArray].Cards[
+            Player[PositionFirstAccountInArray].NumberCard] :=
+            CombinationCardChoice;
+          Player[PositionFirstAccountInArray].SumValuesCard :=
+            Player[PositionFirstAccountInArray].SumValuesCard +
+            Player[PositionFirstAccountInArray].Cards[
+            Player[PositionFirstAccountInArray].NumberCard];
+          OpponentsBetting;
+          ReloadTableForFirstPlayer;
+        end;
+        2:
+        begin
+          if NewGameSelection = True then
+          begin
+            Player[PositionFirstAccountInArray].FirstMove := 0;
+            Player[PositionSecondAccountInArray].FirstMove := 1;
+            NewGameSelection := False;
+            NewGameForSecond;
+          end
+          else
+            Win;
+        end;
+        3:
+        begin
+          MakeBetForFirstPlayer;
+        end;
+        4:
         begin
           ExportDataStats;
           MenuSelection := False;
@@ -1069,6 +1183,7 @@ begin
     ClearScreen;
   BJLabel;
   Start := '';
+  NewGameSelection := True;
   Player[PositionFirstAccountInArray].FirstMove := 0;
   Player[PositionSecondAccountInArray].FirstMove := 0;
 
@@ -1098,7 +1213,10 @@ begin
   gotoXY(31, 14);
   readln(Start);
   ArrCards;
-  NewGame;
+  if Player[PositionFirstAccountInArray].FirstMove = 1 then
+    NewGameForFirst;
+  if Player[PositionSecondAccountInArray].FirstMove = 1 then
+    NewGameForSecond;
 end;
 
 procedure Stats;//Stats User
