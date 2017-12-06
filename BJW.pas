@@ -82,6 +82,7 @@ var
 
   procedure Whore;
   begin
+    TextColor(TEXTCOLORS);
     Writeln(' _____________________¶¶¶¶¶¶¶');
     Writeln('______________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶');
     Writeln('______________¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶');

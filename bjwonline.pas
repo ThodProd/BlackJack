@@ -1136,6 +1136,7 @@ begin
           ExportDataStats;
           MenuSelection := False;
           AlvaysPlay := False;
+          /////////////////////////////////////////////////////////////////////////////////////////
           NewGameSelection := True;
           Break;
         end;
@@ -1239,10 +1240,10 @@ begin
   Player[PositionSecondAccountInArray].FirstMove := 0;
 
   gotoXY(3, 13);
-  Write('Who will walk first? 1 - ', Player[PositionFirstAccountInArray].NamePlayer,
+  Write('Who will play first? 1 - ', Player[PositionFirstAccountInArray].NamePlayer,
     ' or 2 - ', Player[PositionSecondAccountInArray].NamePlayer, ' : ');
 
-  gotoXY(7 + length('Who will walk first? 1 - ') +
+  gotoXY(7 + length('Who will play first? 1 - ') +
     length(Player[PositionFirstAccountInArray].NamePlayer) +
     length(' or 2 - ') + length(Player[PositionSecondAccountInArray].NamePlayer), 13);
 
@@ -1285,17 +1286,20 @@ begin
   Writeln('|      Login               Cash    |');
   for Counter := 1 to NumberAccounts do
   begin
-    gotoXY(3, 12 + Counter);
-    Write('| ', Counter, '. ');
+    if Player[Counter].NamePlayer <> '' then
+    begin
+      gotoXY(3, 12 + Counter);
+      Write('| ', Counter, '. ');
 
-    gotoXY(9, 12 + Counter);
-    Write('| ', Player[Counter].NamePlayer);
+      gotoXY(9, 12 + Counter);
+      Write('| ', Player[Counter].NamePlayer);
 
-    gotoXY(28, 12 + Counter);
-    Writeln(' : ', 'XXXX', '$');
+      gotoXY(28, 12 + Counter);
+      Writeln(' : ', 'XXXX', '$');
 
-    gotoXY(38, 12 + Counter);
-    Writeln('|');
+      gotoXY(38, 12 + Counter);
+      Writeln('|');
+    end;
   end;
   gotoXY(3, 13 + NumberAccounts);
   Writeln('|==================================|');
@@ -1443,7 +1447,8 @@ begin
     Write('| Login is already taken!|');
     gotoXY(26, 15);
     Writeln('|========================|');
-    PRegisterForSecondPlayer;
+    Delay(700);
+    LoginAccountForSecondPlayer;
   end
   else
   begin
@@ -1494,7 +1499,8 @@ begin
     Write('| Login is already taken!|');
     gotoXY(26, 15);
     Writeln('|========================|');
-    PRegisterForFirstPlayer;
+    Delay(700);
+    LoginAccountForFirstPlayer;
   end
   else
   begin
@@ -1552,7 +1558,7 @@ begin
         Readln(Password);
         if Password = Player[Counter].PasswordPlayer then
         begin
-          PositionSecondAccountInArray := Counter;
+          PositionSecondAccountInArray := Player[Counter].NumberPlayerInArray;
           LoginSecondSelection := True;
           break;
         end
@@ -1607,7 +1613,7 @@ begin
       Readln(Password);
       if Password = Player[Counter].PasswordPlayer then
       begin
-        PositionFirstAccountInArray := Counter;
+        PositionFirstAccountInArray := Player[Counter].NumberPlayerInArray;
         LoginFirstSelection := True;
         break;
       end
@@ -1697,8 +1703,8 @@ begin
   Write('| Select Mode:       |');
   gotoXY(3, 17);
   Writeln('|====================|');
-  gotoXY(3, 18);
-  Writeln('|    Exit to Exit    |');
+  //gotoXY(3, 18);
+  //Writeln('|    Exit to Exit    |');
   gotoXY(18, 16);
   Readln(LoginSelection);
 
@@ -1804,6 +1810,7 @@ begin
 
     if ExitOnline = False then
       Break;
+    goto MenuGo;
   end;
 end;
 
