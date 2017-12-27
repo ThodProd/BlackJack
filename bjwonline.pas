@@ -1286,8 +1286,6 @@ begin
   Writeln('|      Login               Cash    |');
   for Counter := 1 to NumberAccounts do
   begin
-    if Player[Counter].NamePlayer <> '' then
-    begin
       gotoXY(3, 12 + Counter);
       Write('| ', Counter, '. ');
 
@@ -1299,7 +1297,6 @@ begin
 
       gotoXY(38, 12 + Counter);
       Writeln('|');
-    end;
   end;
   gotoXY(3, 13 + NumberAccounts);
   Writeln('|==================================|');

@@ -5,33 +5,30 @@ program BJW;
 {$codepage UTF8}
 {$MODE OBJFPC}
 
-
-
-
 uses
   CRT,
   SysUtils,
   BJWOnline;
 
 const
-  Loading = '. . .';
+  LOADING = '. . .';
   MAXPLAYERS = 8;
   MAXBOTS = 7;
   MAXACCOUNTS = 30;
   MAXPLAYERCARDS = 8;
   MAXCARDDECK = 52;
+  NUMBERCARDSTOWIN = 21;
   COLORBACKGROUND = green;
   TEXTCOLORS = white;
 
 type
   TSuit = (sDiamonds, sHearts, sSpades, sClubs);
 
-
 type
   TPlayer = record
     Cards: array [1..MAXPLAYERCARDS] of word;           //Массив карт
     SumValuesCard: word;                                //Сумма всех карт
-    NumberCard: 0..MAXPLAYERCARDS;                      //Количество карт
+    NumberCard: 0..MAXPLAYERCARDS;                      //Количество карт   extrano
     Cash: integer;                                      //Бабло
     Bet: integer;                                       //Ставка игрока
     NamePlayer: string;                                 //Имя игрока
@@ -41,12 +38,12 @@ type
 
 
 var
-  Winner: string[100];
+  Winner: string;
   MenuSelection, LoginSelection, NewGameSelection, NewGameBoolean,
   WinSelection, HideSelection, MakeBetSwitch, LogOutSwitch, AdminSwitch: boolean;
   Player: array [1..MAXACCOUNTS] of TPlayer;
-  CardDeck: array[1..13, 1..4] of integer;
-  WhatPlayersInGame: array[1..MAXBOTS] of word;
+  CardDeck: array[1..13, 1..4] of integer;                      //Использовать константы
+  WhatPlayersInGame: array[1..MAXBOTS] of word;                 //Написать комментарии
   ForbiddenCard: array[1..MAXCARDDECK] of string;
   NumberAccounts, PositionAccountInArray, QuantityCards, QuantityPlayerInPlay,
   ForbiddenCardNumber, Bank: integer;
@@ -119,9 +116,9 @@ var
 
   procedure LoadingLaod;
   var
-    Counter: integer;
+    counter: integer;
   begin
-    for Counter := 1 to length(Loading) do
+    for counter := 1 to length(Loading) do
     begin
       Delay(100);
       Write(Loading[Counter]);
@@ -154,40 +151,40 @@ var
     ClrScr;
   end;
 
-  function OptimalRateTakingIntoAccountSumValueCards(NumberPlayer: integer): integer;
+  function OptimalTakingIntoAccount(NumberPlayer: integer): integer;
   var
     Counter: integer;
   begin
-    OptimalRateTakingIntoAccountSumValueCards := 0;
+    Result := 0;
     if (Player[NumberPlayer].Cash > 0) and (Player[NumberPlayer].Bet >= 0) and
       (Player[NumberPlayer].SumValuesCard < 22) then
     begin
-      if Player[NumberPlayer].SumValuesCard = 21 then
-        OptimalRateTakingIntoAccountSumValueCards := Player[NumberPlayer].Cash;
+      if Player[NumberPlayer].SumValuesCard = NUMBERCARDSTOWIN then
+        OptimalTakingIntoAccount := Player[NumberPlayer].Cash;
       if Player[NumberPlayer].SumValuesCard = 20 then
-        OptimalRateTakingIntoAccountSumValueCards :=
+        OptimalTakingIntoAccount :=
           Round(Player[NumberPlayer].Cash * 0.8);
       if Player[NumberPlayer].SumValuesCard = 19 then
-        OptimalRateTakingIntoAccountSumValueCards :=
+        OptimalTakingIntoAccount :=
           Round(Player[NumberPlayer].Cash * 0.7);
       if Player[NumberPlayer].SumValuesCard = 18 then
-        OptimalRateTakingIntoAccountSumValueCards :=
+        OptimalTakingIntoAccount :=
           Round(Player[NumberPlayer].Cash * 0.5);
       if Player[NumberPlayer].SumValuesCard = 17 then
-        OptimalRateTakingIntoAccountSumValueCards :=
+        OptimalTakingIntoAccount :=
           Round(Player[NumberPlayer].Cash * 0.3);
       if Player[NumberPlayer].SumValuesCard < 17 then
         for Counter := 2 to Player[NumberPlayer].SumValuesCard do
           if Player[NumberPlayer].SumValuesCard = Counter then
-            OptimalRateTakingIntoAccountSumValueCards :=
+            OptimalTakingIntoAccount :=
               Round(Player[NumberPlayer].Cash * 0.1);
 
-      OptimalRateTakingIntoAccountSumValueCards :=
-        ABS(OptimalRateTakingIntoAccountSumValueCards);
+      OptimalTakingIntoAccount :=
+        abs(OptimalTakingIntoAccount);
     end;
 
-    if OptimalRateTakingIntoAccountSumValueCards = 0 then
-      OptimalRateTakingIntoAccountSumValueCards := Player[NumberPlayer].Bet;
+    if OptimalTakingIntoAccount = 0 then
+      OptimalTakingIntoAccount := Player[NumberPlayer].Bet;
   end;
 
   function NumberSimbolsInString(YouString: string; Simbol: string): integer;
@@ -200,16 +197,14 @@ var
         Inc(NumberSimbolsInString);
   end;
 
-  function CheckIntroducedSTR(Introduced: string): boolean;
+  function CheckIntroducedStr(Introduced: string): boolean;
   var
     Code, Symbol: integer;
   begin
-    Code := 0;
+    //Code := 0;
     Val(Introduced, Symbol, Code);
-    if Code <> 0 then
-      CheckIntroducedSTR := True
-    else
-      CheckIntroducedSTR := False;
+    CheckIntroducedSTR := (Code <> 0);
+
   end;
 
   procedure SumValueCards;
@@ -231,7 +226,7 @@ var
 
     for CounterNumberCard := 1 to Player[PositionAccountInArray].NumberCard do
     begin
-      Player[PositionAccountInArray].SumValuesCard :=
+      Player[PositionAccountInArray].SumValuesCard :=               // With .... Do
         Player[PositionAccountInArray].SumValuesCard +
         Player[PositionAccountInArray].Cards[CounterNumberCard];
     end;
@@ -245,9 +240,8 @@ var
     TotalNumberCards := 0;
     QuantityCards := 0;
     for CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
-    begin
       TotalNumberCards += Player[WhatPlayersInGame[CounterPlayer]].NumberCard;
-    end;
+
     TotalNumberCards += Player[PositionAccountInArray].NumberCard;
     QuantityCards := MAXCARDDECK - TotalNumberCards;
   end;
@@ -296,25 +290,58 @@ var
     end;
     AddForbiddenCard(Comb);
     CombinationCard := CardDeck[i, j];
-
   end;
+
+  function Encode(First: string): string;
+  var
+    i: integer;
+    a, b: char;
+    longkey, Answer, Key: string;
+  begin
+    Randomize;
+    longkey := '';
+    Answer := '';
+    Key := 'v';
+
+    if length(First) > Length(Key) then
+    begin
+      for i := 0 to length(First) div length(Key) do
+        longkey += Key;
+    end
+    else
+      longkey := Key;
+    for i := 1 to length(First) do
+    begin
+      a := char((byte(First[i]) xor byte(longkey[i])));
+      b := char((byte(a) xor byte('S')));
+      Answer += b;
+    end;
+    Result := Answer;
+  end;
+
 
   procedure LoadDataStats;//Load GameStats
   var
     i: integer;
+    N, C: string;
   begin
     Assign(T, 'DataStatistic.txt');
     Reset(T);
-    Readln(T, NumberAccounts);
+    Readln(T, N);
+    NumberAccounts := StrToInt(Encode(N));
     for i := 1 to NumberAccounts do
     begin
       Readln(T, Player[i].NamePlayer);
+      Player[i].NamePlayer := Encode(Player[i].NamePlayer);
       Readln(T, Player[i].PasswordPlayer);
-      Readln(T, Player[i].Cash);
+      Player[i].PasswordPlayer := Encode(Player[i].PasswordPlayer);
+      Readln(T, C);
+      Player[i].Cash := StrToInt(Encode(C));
       Player[i].NumberPlayerInArray := i;
     end;
     Close(T);
   end;
+
 
   procedure ExportDataStats;//Export GameStats
   var
@@ -322,12 +349,12 @@ var
   begin
     Assign(T, 'DataStatistic.txt');
     Rewrite(T);
-    Writeln(T, NumberAccounts);
+    Writeln(T, Encode(IntToStr(NumberAccounts)));
     for i := 1 to NumberAccounts do
     begin
-      writeln(T, Player[i].NamePlayer);
-      writeln(T, Player[i].PasswordPlayer);
-      writeln(T, Player[i].Cash);
+      writeln(T, Encode(Player[i].NamePlayer));
+      writeln(T, Encode(Player[i].PasswordPlayer));
+      writeln(T, Encode(IntToStr(Player[i].Cash)));
     end;
     Close(T);
   end;
@@ -341,7 +368,7 @@ var
     for  CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
     begin
       Player[WhatPlayersInGame[CounterPlayer]].Bet :=
-        OptimalRateTakingIntoAccountSumValueCards(WhatPlayersInGame[CounterPlayer]);
+        OptimalTakingIntoAccount(WhatPlayersInGame[CounterPlayer]);
     end;
 
     for  CounterPlayer := 1 to QuantityPlayerInPlay - 1 do
@@ -551,7 +578,7 @@ var
 
       for i := 1 to QuantityPlayerInPlay - 1 do
       begin
-        if Player[WhatPlayersInGame[i]].SumValuesCard <= 21 then
+        if Player[WhatPlayersInGame[i]].SumValuesCard <= NUMBERCARDSTOWIN then
         begin
           Inc(j);
           PlayerNotLose[j, 1] := Player[WhatPlayersInGame[i]].SumValuesCard;
@@ -559,7 +586,7 @@ var
         end;
       end;
 
-      if Player[PositionAccountInArray].SumValuesCard <= 21 then
+      if Player[PositionAccountInArray].SumValuesCard <= NUMBERCARDSTOWIN then
       begin
         Inc(j);
         PlayerNotLose[j, 1] := Player[PositionAccountInArray].SumValuesCard;
@@ -656,17 +683,16 @@ var
   begin
     for PlayerCounter := 1 to QuantityPlayerInPlay - 1 do
     begin
-      if Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 21 then
+      if Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= NUMBERCARDSTOWIN then
       begin
 
         CombinationCardChoice := CombinationCard;
         if CombinationCardChoice = 0 then
-          if ((Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard +
-            11) > 21) then
+          if ((Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard + 11) >
+            NUMBERCARDSTOWIN) then
             CombinationCardChoice := 1
           else
             CombinationCardChoice := 11;
-
 
         if Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard <= 11 then
         begin
@@ -752,27 +778,26 @@ var
         end;
       end;
     end;
-    //ReloadTable;
   end;
 
   procedure CheckLoos;
+  var
+    counter: integer;
   begin
     SumValueCards;
-    if Player[PositionAccountInArray].SumValuesCard > 21 then
+    if Player[PositionAccountInArray].SumValuesCard > NUMBERCARDSTOWIN then
     begin
-      TakeCardBots;
-      TakeCardBots;
+      for counter := 1 to random(2) + 2 do
+        TakeCardBots;
+
       Win;
     end;
   end;
 
   function min(one: integer; two: integer): integer;
   begin
-    if one > two then
-      min := two
-    else
-      min := one;
-    if one = two then
+    min := one;
+    if one >= two then
       min := two;
   end;
 
@@ -836,7 +861,7 @@ var
           CombinationCardChoice := CombinationCard;
           if CombinationCardChoice = 0 then
             if ((Player[WhatPlayersInGame[PlayerCounter]].SumValuesCard +
-              11) > 21) then
+              11) > NUMBERCARDSTOWIN) then
               CombinationCardChoice := 1
             else
               CombinationCardChoice := 11;
@@ -857,7 +882,8 @@ var
       begin
         CombinationCardChoice := CombinationCard;
         if CombinationCardChoice = 0 then
-          if ((Player[PositionAccountInArray].SumValuesCard + 11) > 21) then
+          if ((Player[PositionAccountInArray].SumValuesCard + 11) >
+            NUMBERCARDSTOWIN) then
             CombinationCardChoice := 1
           else
             CombinationCardChoice := 11;
